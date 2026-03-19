@@ -1,0 +1,768 @@
+{
+  "id": "room_1773902255985_fa8mca",
+  "roomCode": "878U7N",
+  "startTime": "2026-03-19T19:30",
+  "captainRule": "highest",
+  "status": "drafting",
+  "createdAt": "2026-03-19T06:37:35.985Z",
+  "updatedAt": "2026-03-19T07:59:06.683Z",
+  "adminToken": "WVJF3Y8ACG",
+  "players": [
+    {
+      "id": "Ame",
+      "power": 2680,
+      "signupOrder": 0
+    },
+    {
+      "id": "Maybe",
+      "power": 2650,
+      "signupOrder": 1
+    },
+    {
+      "id": "Fy",
+      "power": 2620,
+      "signupOrder": 2
+    },
+    {
+      "id": "Somnus",
+      "power": 2590,
+      "signupOrder": 3
+    },
+    {
+      "id": "Chalice",
+      "power": 2560,
+      "signupOrder": 4
+    },
+    {
+      "id": "XinQ",
+      "power": 2530,
+      "signupOrder": 5
+    },
+    {
+      "id": "Dy",
+      "power": 2500,
+      "signupOrder": 6
+    },
+    {
+      "id": "Faith_bian",
+      "power": 2470,
+      "signupOrder": 7
+    },
+    {
+      "id": "Nisha",
+      "power": 2440,
+      "signupOrder": 8
+    },
+    {
+      "id": "Crystallis",
+      "power": 2410,
+      "signupOrder": 9
+    },
+    {
+      "id": "zai",
+      "power": 2380,
+      "signupOrder": 10
+    },
+    {
+      "id": "Boxi",
+      "power": 2350,
+      "signupOrder": 11
+    },
+    {
+      "id": "Micke",
+      "power": 2320,
+      "signupOrder": 12
+    },
+    {
+      "id": "Yatoro",
+      "power": 2290,
+      "signupOrder": 13
+    },
+    {
+      "id": "Collapse",
+      "power": 2260,
+      "signupOrder": 14
+    },
+    {
+      "id": "Mira",
+      "power": 2230,
+      "signupOrder": 15
+    },
+    {
+      "id": "Miposhka",
+      "power": 2200,
+      "signupOrder": 16
+    },
+    {
+      "id": "TORONTOTOKYO",
+      "power": 2170,
+      "signupOrder": 17
+    },
+    {
+      "id": "Monet",
+      "power": 2140,
+      "signupOrder": 18
+    },
+    {
+      "id": "JT-",
+      "power": 2110,
+      "signupOrder": 19
+    },
+    {
+      "id": "Ori",
+      "power": 2080,
+      "signupOrder": 20
+    },
+    {
+      "id": "XXS",
+      "power": 2050,
+      "signupOrder": 21
+    },
+    {
+      "id": "Pyw",
+      "power": 2020,
+      "signupOrder": 22
+    },
+    {
+      "id": "kaka",
+      "power": 1990,
+      "signupOrder": 23
+    },
+    {
+      "id": "Paparazi",
+      "power": 1960,
+      "signupOrder": 24
+    },
+    {
+      "id": "Dyrachyo",
+      "power": 1930,
+      "signupOrder": 25
+    },
+    {
+      "id": "Quinn",
+      "power": 1900,
+      "signupOrder": 26
+    },
+    {
+      "id": "Ace",
+      "power": 1870,
+      "signupOrder": 27
+    },
+    {
+      "id": "Tofu",
+      "power": 1840,
+      "signupOrder": 28
+    },
+    {
+      "id": "Seleri",
+      "power": 1810,
+      "signupOrder": 29
+    },
+    {
+      "id": "Nightfall",
+      "power": 1780,
+      "signupOrder": 30
+    },
+    {
+      "id": "gpk",
+      "power": 1750,
+      "signupOrder": 31
+    },
+    {
+      "id": "Save-",
+      "power": 1720,
+      "signupOrder": 32
+    },
+    {
+      "id": "Pure",
+      "power": 1690,
+      "signupOrder": 33
+    },
+    {
+      "id": "MieRo",
+      "power": 1660,
+      "signupOrder": 34
+    },
+    {
+      "id": "Kingslayer",
+      "power": 1630,
+      "signupOrder": 35
+    },
+    {
+      "id": "Shiro",
+      "power": 1600,
+      "signupOrder": 36
+    },
+    {
+      "id": "niu",
+      "power": 1570,
+      "signupOrder": 37
+    },
+    {
+      "id": "planet",
+      "power": 1540,
+      "signupOrder": 38
+    },
+    {
+      "id": "Lou",
+      "power": 1510,
+      "signupOrder": 39
+    },
+    {
+      "id": "Pyw2",
+      "power": 1480,
+      "signupOrder": 40
+    },
+    {
+      "id": "zzq",
+      "power": 1450,
+      "signupOrder": 41
+    }
+  ],
+  "playerMap": {
+    "Ame": {
+      "id": "Ame",
+      "power": 2680,
+      "signupOrder": 0
+    },
+    "Maybe": {
+      "id": "Maybe",
+      "power": 2650,
+      "signupOrder": 1
+    },
+    "Fy": {
+      "id": "Fy",
+      "power": 2620,
+      "signupOrder": 2
+    },
+    "Somnus": {
+      "id": "Somnus",
+      "power": 2590,
+      "signupOrder": 3
+    },
+    "Chalice": {
+      "id": "Chalice",
+      "power": 2560,
+      "signupOrder": 4
+    },
+    "XinQ": {
+      "id": "XinQ",
+      "power": 2530,
+      "signupOrder": 5
+    },
+    "Dy": {
+      "id": "Dy",
+      "power": 2500,
+      "signupOrder": 6
+    },
+    "Faith_bian": {
+      "id": "Faith_bian",
+      "power": 2470,
+      "signupOrder": 7
+    },
+    "Nisha": {
+      "id": "Nisha",
+      "power": 2440,
+      "signupOrder": 8
+    },
+    "Crystallis": {
+      "id": "Crystallis",
+      "power": 2410,
+      "signupOrder": 9
+    },
+    "zai": {
+      "id": "zai",
+      "power": 2380,
+      "signupOrder": 10
+    },
+    "Boxi": {
+      "id": "Boxi",
+      "power": 2350,
+      "signupOrder": 11
+    },
+    "Micke": {
+      "id": "Micke",
+      "power": 2320,
+      "signupOrder": 12
+    },
+    "Yatoro": {
+      "id": "Yatoro",
+      "power": 2290,
+      "signupOrder": 13
+    },
+    "Collapse": {
+      "id": "Collapse",
+      "power": 2260,
+      "signupOrder": 14
+    },
+    "Mira": {
+      "id": "Mira",
+      "power": 2230,
+      "signupOrder": 15
+    },
+    "Miposhka": {
+      "id": "Miposhka",
+      "power": 2200,
+      "signupOrder": 16
+    },
+    "TORONTOTOKYO": {
+      "id": "TORONTOTOKYO",
+      "power": 2170,
+      "signupOrder": 17
+    },
+    "Monet": {
+      "id": "Monet",
+      "power": 2140,
+      "signupOrder": 18
+    },
+    "JT-": {
+      "id": "JT-",
+      "power": 2110,
+      "signupOrder": 19
+    },
+    "Ori": {
+      "id": "Ori",
+      "power": 2080,
+      "signupOrder": 20
+    },
+    "XXS": {
+      "id": "XXS",
+      "power": 2050,
+      "signupOrder": 21
+    },
+    "Pyw": {
+      "id": "Pyw",
+      "power": 2020,
+      "signupOrder": 22
+    },
+    "kaka": {
+      "id": "kaka",
+      "power": 1990,
+      "signupOrder": 23
+    },
+    "Paparazi": {
+      "id": "Paparazi",
+      "power": 1960,
+      "signupOrder": 24
+    },
+    "Dyrachyo": {
+      "id": "Dyrachyo",
+      "power": 1930,
+      "signupOrder": 25
+    },
+    "Quinn": {
+      "id": "Quinn",
+      "power": 1900,
+      "signupOrder": 26
+    },
+    "Ace": {
+      "id": "Ace",
+      "power": 1870,
+      "signupOrder": 27
+    },
+    "Tofu": {
+      "id": "Tofu",
+      "power": 1840,
+      "signupOrder": 28
+    },
+    "Seleri": {
+      "id": "Seleri",
+      "power": 1810,
+      "signupOrder": 29
+    },
+    "Nightfall": {
+      "id": "Nightfall",
+      "power": 1780,
+      "signupOrder": 30
+    },
+    "gpk": {
+      "id": "gpk",
+      "power": 1750,
+      "signupOrder": 31
+    },
+    "Save-": {
+      "id": "Save-",
+      "power": 1720,
+      "signupOrder": 32
+    },
+    "Pure": {
+      "id": "Pure",
+      "power": 1690,
+      "signupOrder": 33
+    },
+    "MieRo": {
+      "id": "MieRo",
+      "power": 1660,
+      "signupOrder": 34
+    },
+    "Kingslayer": {
+      "id": "Kingslayer",
+      "power": 1630,
+      "signupOrder": 35
+    },
+    "Shiro": {
+      "id": "Shiro",
+      "power": 1600,
+      "signupOrder": 36
+    },
+    "niu": {
+      "id": "niu",
+      "power": 1570,
+      "signupOrder": 37
+    },
+    "planet": {
+      "id": "planet",
+      "power": 1540,
+      "signupOrder": 38
+    },
+    "Lou": {
+      "id": "Lou",
+      "power": 1510,
+      "signupOrder": 39
+    },
+    "Pyw2": {
+      "id": "Pyw2",
+      "power": 1480,
+      "signupOrder": 40
+    },
+    "zzq": {
+      "id": "zzq",
+      "power": 1450,
+      "signupOrder": 41
+    }
+  },
+  "teamSize": 5,
+  "teamCount": 8,
+  "teams": [
+    {
+      "id": "Faith_bian",
+      "name": "Faith_bian",
+      "captain": {
+        "id": "Faith_bian",
+        "power": 2470,
+        "signupOrder": 7
+      },
+      "members": [
+        {
+          "id": "Faith_bian",
+          "power": 2470,
+          "signupOrder": 7
+        },
+        {
+          "id": "Nisha",
+          "power": 2440,
+          "signupOrder": 8
+        }
+      ],
+      "totalPower": 4910
+    },
+    {
+      "id": "Dy",
+      "name": "Dy",
+      "captain": {
+        "id": "Dy",
+        "power": 2500,
+        "signupOrder": 6
+      },
+      "members": [
+        {
+          "id": "Dy",
+          "power": 2500,
+          "signupOrder": 6
+        },
+        {
+          "id": "Micke",
+          "power": 2320,
+          "signupOrder": 12
+        }
+      ],
+      "totalPower": 4820
+    },
+    {
+      "id": "XinQ",
+      "name": "XinQ",
+      "captain": {
+        "id": "XinQ",
+        "power": 2530,
+        "signupOrder": 5
+      },
+      "members": [
+        {
+          "id": "XinQ",
+          "power": 2530,
+          "signupOrder": 5
+        },
+        {
+          "id": "Collapse",
+          "power": 2260,
+          "signupOrder": 14
+        }
+      ],
+      "totalPower": 4790
+    },
+    {
+      "id": "Chalice",
+      "name": "Chalice",
+      "captain": {
+        "id": "Chalice",
+        "power": 2560,
+        "signupOrder": 4
+      },
+      "members": [
+        {
+          "id": "Chalice",
+          "power": 2560,
+          "signupOrder": 4
+        },
+        {
+          "id": "zai",
+          "power": 2380,
+          "signupOrder": 10
+        }
+      ],
+      "totalPower": 4940
+    },
+    {
+      "id": "Somnus",
+      "name": "Somnus",
+      "captain": {
+        "id": "Somnus",
+        "power": 2590,
+        "signupOrder": 3
+      },
+      "members": [
+        {
+          "id": "Somnus",
+          "power": 2590,
+          "signupOrder": 3
+        },
+        {
+          "id": "Crystallis",
+          "power": 2410,
+          "signupOrder": 9
+        }
+      ],
+      "totalPower": 5000
+    },
+    {
+      "id": "Fy",
+      "name": "Fy",
+      "captain": {
+        "id": "Fy",
+        "power": 2620,
+        "signupOrder": 2
+      },
+      "members": [
+        {
+          "id": "Fy",
+          "power": 2620,
+          "signupOrder": 2
+        }
+      ],
+      "totalPower": 2620
+    },
+    {
+      "id": "Maybe",
+      "name": "Maybe",
+      "captain": {
+        "id": "Maybe",
+        "power": 2650,
+        "signupOrder": 1
+      },
+      "members": [
+        {
+          "id": "Maybe",
+          "power": 2650,
+          "signupOrder": 1
+        }
+      ],
+      "totalPower": 2650
+    },
+    {
+      "id": "Ame",
+      "name": "Ame",
+      "captain": {
+        "id": "Ame",
+        "power": 2680,
+        "signupOrder": 0
+      },
+      "members": [
+        {
+          "id": "Ame",
+          "power": 2680,
+          "signupOrder": 0
+        }
+      ],
+      "totalPower": 2680
+    }
+  ],
+  "captains": [
+    {
+      "id": "Faith_bian",
+      "power": 2470,
+      "signupOrder": 7
+    },
+    {
+      "id": "Dy",
+      "power": 2500,
+      "signupOrder": 6
+    },
+    {
+      "id": "XinQ",
+      "power": 2530,
+      "signupOrder": 5
+    },
+    {
+      "id": "Chalice",
+      "power": 2560,
+      "signupOrder": 4
+    },
+    {
+      "id": "Somnus",
+      "power": 2590,
+      "signupOrder": 3
+    },
+    {
+      "id": "Fy",
+      "power": 2620,
+      "signupOrder": 2
+    },
+    {
+      "id": "Maybe",
+      "power": 2650,
+      "signupOrder": 1
+    },
+    {
+      "id": "Ame",
+      "power": 2680,
+      "signupOrder": 0
+    }
+  ],
+  "captainAccess": [
+    {
+      "captainId": "Faith_bian",
+      "token": "97ZUS4Z4",
+      "teamId": "Faith_bian"
+    },
+    {
+      "captainId": "Dy",
+      "token": "A5DTJPV6",
+      "teamId": "Dy"
+    },
+    {
+      "captainId": "XinQ",
+      "token": "SENUFTYX",
+      "teamId": "XinQ"
+    },
+    {
+      "captainId": "Chalice",
+      "token": "7ULT6Z4S",
+      "teamId": "Chalice"
+    },
+    {
+      "captainId": "Somnus",
+      "token": "K9XXB8BH",
+      "teamId": "Somnus"
+    },
+    {
+      "captainId": "Fy",
+      "token": "M55ZMDPA",
+      "teamId": "Fy"
+    },
+    {
+      "captainId": "Maybe",
+      "token": "V4MXWNGB",
+      "teamId": "Maybe"
+    },
+    {
+      "captainId": "Ame",
+      "token": "XU72B2GJ",
+      "teamId": "Ame"
+    }
+  ],
+  "availablePlayers": [
+    "Boxi",
+    "Yatoro",
+    "Mira",
+    "Miposhka",
+    "TORONTOTOKYO",
+    "Monet",
+    "JT-",
+    "Ori",
+    "XXS",
+    "Pyw",
+    "kaka",
+    "Paparazi",
+    "Dyrachyo",
+    "Quinn",
+    "Ace",
+    "Tofu",
+    "Seleri",
+    "Nightfall",
+    "gpk",
+    "Save-",
+    "Pure",
+    "MieRo",
+    "Kingslayer",
+    "Shiro",
+    "niu",
+    "planet",
+    "Lou",
+    "Pyw2",
+    "zzq"
+  ],
+  "benchPlayers": [],
+  "pickHistory": [
+    {
+      "round": 1,
+      "teamId": "Faith_bian",
+      "captainId": "Faith_bian",
+      "playerId": "Nisha",
+      "playerPower": 2440,
+      "pickedAt": "2026-03-19T07:03:46.892Z"
+    },
+    {
+      "round": 1,
+      "teamId": "Dy",
+      "captainId": "Dy",
+      "playerId": "Micke",
+      "playerPower": 2320,
+      "pickedAt": "2026-03-19T07:03:59.004Z"
+    },
+    {
+      "round": 1,
+      "teamId": "XinQ",
+      "captainId": "XinQ",
+      "playerId": "Collapse",
+      "playerPower": 2260,
+      "pickedAt": "2026-03-19T07:04:03.488Z"
+    },
+    {
+      "round": 1,
+      "teamId": "Chalice",
+      "captainId": "Chalice",
+      "playerId": "zai",
+      "playerPower": 2380,
+      "pickedAt": "2026-03-19T07:07:27.310Z"
+    },
+    {
+      "round": 1,
+      "teamId": "Somnus",
+      "captainId": "Somnus",
+      "playerId": "Crystallis",
+      "playerPower": 2410,
+      "pickedAt": "2026-03-19T07:59:06.683Z"
+    }
+  ],
+  "currentRound": 1,
+  "roundQueue": [
+    "Fy",
+    "Maybe",
+    "Ame"
+  ],
+  "currentTurn": {
+    "round": 1,
+    "teamId": "Fy",
+    "captainId": "Fy"
+  }
+}
