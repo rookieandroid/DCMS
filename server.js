@@ -4,7 +4,9 @@ const http = require("node:http");
 const fs = require("node:fs/promises");
 const path = require("node:path");
 const { ensureDb, loadDb, mutateDb, saveDb } = require("./src/lib/db");
-const { getAuth, login } = require("./src/services/auth");
+const { appendAuditLog } = require("./src/lib/audit");
+const { rateLimit } = require("./src/lib/rate-limit");
+const { getAdminPassword, getAuth, login } = require("./src/services/auth");
 const {
   createPlayer,
   deletePlayer,
@@ -59,6 +61,35 @@ async function readJson(req) {
 
 function getToken(req, reqUrl) {
   return reqUrl.searchParams.get("token") || req.headers.authorization?.replace(/^Bearer\s+/i, "") || "";
+}
+
+function getClientIp(req) {
+  const forwarded = String(req.headers["x-forwarded-for"] || "").split(",")[0].trim();
+  return forwarded || req.socket.remoteAddress || "unknown";
+}
+
+function describeActor(auth) {
+  if (!auth || auth.role === "guest") {
+    return { role: "guest" };
+  }
+  if (auth.role === "admin") {
+    return { role: "admin" };
+  }
+  return { role: "player", playerId: auth.playerId };
+}
+
+function enforceRateLimit(req, res, key, max, windowMs) {
+  const ip = getClientIp(req);
+  const result = rateLimit({
+    key: `${ip}:${key}`,
+    max,
+    windowMs
+  });
+  if (!result.allowed) {
+    sendJson(res, 429, { error: "请求过于频繁，请稍后再试。" });
+    return false;
+  }
+  return true;
 }
 
 async function serveStatic(urlPath, res) {
@@ -216,16 +247,31 @@ const server = http.createServer(async (req, res) => {
   const reqUrl = new URL(req.url, `http://${req.headers.host}`);
 
   if (req.method === "POST" && reqUrl.pathname === "/api/auth/login") {
+    if (!enforceRateLimit(req, res, "auth-login", 10, 60 * 1000)) {
+      return;
+    }
     try {
       const body = await readJson(req);
       const payload = await mutateDb((db) => login(db, body));
       const db = await loadDb();
       const auth = getAuth(db, payload.token);
+      await appendAuditLog({
+        action: "auth.login.success",
+        actor: auth,
+        ip: getClientIp(req),
+        details: { type: body.type }
+      });
       sendJson(res, 200, {
         ...payload,
         bootstrap: buildBootstrap(db, auth)
       });
     } catch (error) {
+      await appendAuditLog({
+        action: "auth.login.failed",
+        actor: { role: "guest" },
+        ip: getClientIp(req),
+        details: { type: reqUrl.pathname }
+      });
       sendJson(res, 400, { error: error.message || "登录失败。" });
     }
     return;
@@ -256,11 +302,22 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (req.method === "POST" && reqUrl.pathname === "/api/players") {
+    if (!enforceRateLimit(req, res, "players-write", 30, 60 * 1000)) {
+      return;
+    }
     try {
       const body = await readJson(req);
+      let authForAudit = { role: "guest" };
       const payload = await mutateDb((db) => {
         const auth = getAuth(db, getToken(req, reqUrl));
+        authForAudit = auth;
         return { player: createPlayer(db, auth, body) };
+      });
+      await appendAuditLog({
+        action: "player.create",
+        actor: describeActor(authForAudit),
+        ip: getClientIp(req),
+        targetId: payload.player.id
       });
       sendJson(res, 201, payload);
     } catch (error) {
@@ -273,11 +330,22 @@ const server = http.createServer(async (req, res) => {
   if (playerMatch) {
     const [, playerId] = playerMatch;
     if (req.method === "PATCH") {
+      if (!enforceRateLimit(req, res, "players-write", 30, 60 * 1000)) {
+        return;
+      }
       try {
         const body = await readJson(req);
+        let authForAudit = { role: "guest" };
         const payload = await mutateDb((db) => {
           const auth = getAuth(db, getToken(req, reqUrl));
+          authForAudit = auth;
           return { player: updatePlayer(db, auth, playerId, body) };
+        });
+        await appendAuditLog({
+          action: "player.update",
+          actor: describeActor(authForAudit),
+          ip: getClientIp(req),
+          targetId: playerId
         });
         sendJson(res, 200, payload);
       } catch (error) {
@@ -286,10 +354,21 @@ const server = http.createServer(async (req, res) => {
       return;
     }
     if (req.method === "DELETE") {
+      if (!enforceRateLimit(req, res, "players-write", 20, 60 * 1000)) {
+        return;
+      }
       try {
+        let authForAudit = { role: "guest" };
         const payload = await mutateDb((db) => {
           const auth = getAuth(db, getToken(req, reqUrl));
+          authForAudit = auth;
           return deletePlayer(db, auth, playerId);
+        });
+        await appendAuditLog({
+          action: "player.delete",
+          actor: describeActor(authForAudit),
+          ip: getClientIp(req),
+          targetId: playerId
         });
         sendJson(res, 200, payload);
       } catch (error) {
@@ -310,11 +389,22 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (req.method === "POST" && reqUrl.pathname === "/api/events") {
+    if (!enforceRateLimit(req, res, "events-write", 20, 60 * 1000)) {
+      return;
+    }
     try {
       const body = await readJson(req);
+      let authForAudit = { role: "guest" };
       const payload = await mutateDb((db) => {
         const auth = getAuth(db, getToken(req, reqUrl));
+        authForAudit = auth;
         return { event: createEvent(db, auth, body) };
+      });
+      await appendAuditLog({
+        action: "event.create",
+        actor: describeActor(authForAudit),
+        ip: getClientIp(req),
+        targetId: payload.event.id
       });
       sendJson(res, 201, payload);
     } catch (error) {
@@ -327,11 +417,23 @@ const server = http.createServer(async (req, res) => {
   if (eventBaseMatch) {
     const [, eventId] = eventBaseMatch;
     if (req.method === "PATCH") {
+      if (!enforceRateLimit(req, res, "events-write", 20, 60 * 1000)) {
+        return;
+      }
       try {
         const body = await readJson(req);
+        let authForAudit = { role: "guest" };
         const payload = await mutateDb((db) => {
           const auth = getAuth(db, getToken(req, reqUrl));
+          authForAudit = auth;
           return { event: updateEvent(db, auth, eventId, body) };
+        });
+        await appendAuditLog({
+          action: "event.update",
+          actor: describeActor(authForAudit),
+          ip: getClientIp(req),
+          targetId: eventId,
+          details: body
         });
         await broadcastEventSnapshots();
         sendJson(res, 200, payload);
@@ -341,10 +443,21 @@ const server = http.createServer(async (req, res) => {
       return;
     }
     if (req.method === "DELETE") {
+      if (!enforceRateLimit(req, res, "events-delete", 10, 60 * 1000)) {
+        return;
+      }
       try {
+        let authForAudit = { role: "guest" };
         const payload = await mutateDb((db) => {
           const auth = getAuth(db, getToken(req, reqUrl));
+          authForAudit = auth;
           return deleteEvent(db, auth, eventId);
+        });
+        await appendAuditLog({
+          action: "event.delete",
+          actor: describeActor(authForAudit),
+          ip: getClientIp(req),
+          targetId: eventId
         });
         await broadcastEventSnapshots();
         sendJson(res, 200, payload);
@@ -359,15 +472,27 @@ const server = http.createServer(async (req, res) => {
   if (eventMatch) {
     const [, eventId, action] = eventMatch;
     if (req.method === "POST" && action === "signup") {
+      if (!enforceRateLimit(req, res, "event-signup", 30, 60 * 1000)) {
+        return;
+      }
       try {
         const body = await readJson(req);
+        let authForAudit = { role: "guest" };
         const payload = await mutateDb((db) => {
           const auth = getAuth(db, getToken(req, reqUrl));
+          authForAudit = auth;
           const event = signupForEvent(db, auth, eventId, body.action, body.playerId);
           return {
             event,
             inhouseSession: getSessionForEvent(db, eventId)
           };
+        });
+        await appendAuditLog({
+          action: body.action === "cancel" ? "event.signup.cancel" : "event.signup",
+          actor: describeActor(authForAudit),
+          ip: getClientIp(req),
+          targetId: eventId,
+          details: { playerId: body.playerId || authForAudit.playerId || null }
         });
         await broadcastEventSnapshots();
         sendJson(res, 200, payload);
@@ -377,17 +502,29 @@ const server = http.createServer(async (req, res) => {
       return;
     }
     if (req.method === "POST" && action === "captains") {
+      if (!enforceRateLimit(req, res, "event-captains", 10, 60 * 1000)) {
+        return;
+      }
       try {
         const body = await readJson(req);
         let sessionId = "";
+        let authForAudit = { role: "guest" };
         const payload = await mutateDb((db) => {
           const auth = getAuth(db, getToken(req, reqUrl));
+          authForAudit = auth;
           const inhouseSession = assignCaptains(db, auth, eventId, body.playerIds);
           sessionId = inhouseSession.id;
           return {
             inhouseSession,
             event: listEvents(db, auth).find((item) => item.id === eventId)
           };
+        });
+        await appendAuditLog({
+          action: "event.captains.assign",
+          actor: describeActor(authForAudit),
+          ip: getClientIp(req),
+          targetId: eventId,
+          details: { playerIds: body.playerIds }
         });
         await broadcastInhouse(sessionId);
         await broadcastEventSnapshots();
@@ -419,11 +556,23 @@ const server = http.createServer(async (req, res) => {
       return;
     }
     if (req.method === "POST" && action === "picks") {
+      if (!enforceRateLimit(req, res, "inhouse-pick", 30, 60 * 1000)) {
+        return;
+      }
       try {
         const body = await readJson(req);
+        let authForAudit = { role: "guest" };
         const payload = await mutateDb((db) => {
           const auth = getAuth(db, getToken(req, reqUrl));
+          authForAudit = auth;
           return { inhouseSession: makePick(db, auth, sessionId, body.playerId) };
+        });
+        await appendAuditLog({
+          action: "inhouse.pick",
+          actor: describeActor(authForAudit),
+          ip: getClientIp(req),
+          targetId: sessionId,
+          details: { playerId: body.playerId }
         });
         await broadcastInhouse(sessionId);
         await broadcastEventSnapshots();
@@ -471,11 +620,22 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (req.method === "POST" && reqUrl.pathname === "/api/auctions") {
+    if (!enforceRateLimit(req, res, "auction-write", 20, 60 * 1000)) {
+      return;
+    }
     try {
       const body = await readJson(req);
+      let authForAudit = { role: "guest" };
       const payload = await mutateDb((db) => {
         const auth = getAuth(db, getToken(req, reqUrl));
+        authForAudit = auth;
         return { auction: createAuction(db, auth, body) };
+      });
+      await appendAuditLog({
+        action: "auction.create",
+        actor: describeActor(authForAudit),
+        ip: getClientIp(req),
+        targetId: payload.auction.id
       });
       sendJson(res, 201, payload);
     } catch (error) {
@@ -504,10 +664,21 @@ const server = http.createServer(async (req, res) => {
       return;
     }
     if (req.method === "POST" && action === "start") {
+      if (!enforceRateLimit(req, res, "auction-start", 10, 60 * 1000)) {
+        return;
+      }
       try {
+        let authForAudit = { role: "guest" };
         const payload = await mutateDb((db) => {
           const auth = getAuth(db, getToken(req, reqUrl));
+          authForAudit = auth;
           return { auction: startAuction(db, auth, auctionId) };
+        });
+        await appendAuditLog({
+          action: "auction.start",
+          actor: describeActor(authForAudit),
+          ip: getClientIp(req),
+          targetId: auctionId
         });
         await broadcastAuction(auctionId);
         await broadcastEventSnapshots();
@@ -518,10 +689,21 @@ const server = http.createServer(async (req, res) => {
       return;
     }
     if (req.method === "POST" && action === "pause") {
+      if (!enforceRateLimit(req, res, "auction-pause", 20, 60 * 1000)) {
+        return;
+      }
       try {
+        let authForAudit = { role: "guest" };
         const payload = await mutateDb((db) => {
           const auth = getAuth(db, getToken(req, reqUrl));
+          authForAudit = auth;
           return { auction: pauseAuction(db, auth, auctionId) };
+        });
+        await appendAuditLog({
+          action: "auction.pause",
+          actor: describeActor(authForAudit),
+          ip: getClientIp(req),
+          targetId: auctionId
         });
         await broadcastAuction(auctionId);
         sendJson(res, 200, payload);
@@ -531,11 +713,23 @@ const server = http.createServer(async (req, res) => {
       return;
     }
     if (req.method === "POST" && action === "bids") {
+      if (!enforceRateLimit(req, res, "auction-bid", 60, 60 * 1000)) {
+        return;
+      }
       try {
         const body = await readJson(req);
+        let authForAudit = { role: "guest" };
         const payload = await mutateDb((db) => {
           const auth = getAuth(db, getToken(req, reqUrl));
+          authForAudit = auth;
           return { auction: bid(db, auth, auctionId, body) };
+        });
+        await appendAuditLog({
+          action: "auction.bid",
+          actor: describeActor(authForAudit),
+          ip: getClientIp(req),
+          targetId: auctionId,
+          details: { amount: body.amount }
         });
         await broadcastAuction(auctionId);
         sendJson(res, 200, payload);

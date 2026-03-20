@@ -223,7 +223,7 @@ function renderAuthPanel() {
             <div class="auth-grid">
               <form id="admin-login-form" class="stack">
                 <h3>管理员登录</h3>
-                <label>口令<input type="password" name="password" placeholder="演示口令默认 dcms-admin" required /></label>
+                <label>口令<input type="password" name="password" placeholder="请输入管理员口令" required /></label>
                 <button type="submit">进入后台</button>
               </form>
               <form id="player-login-form" class="stack">

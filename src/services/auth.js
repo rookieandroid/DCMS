@@ -2,7 +2,16 @@
 
 const { nowIso, randomToken } = require("../lib/utils");
 
-const ADMIN_PASSWORD = process.env.DCMS_ADMIN_PASSWORD || "dcms-admin";
+function getAdminPassword() {
+  const password = process.env.DCMS_ADMIN_PASSWORD || "";
+  if (password) {
+    return password;
+  }
+  if (process.env.NODE_ENV === "production") {
+    throw new Error("生产环境未配置管理员口令。");
+  }
+  return "dcms-admin";
+}
 
 function createSession(db, session) {
   const token = randomToken(32);
@@ -19,7 +28,7 @@ function createSession(db, session) {
 function login(db, input) {
   const type = String(input.type || "").trim();
   if (type === "admin") {
-    if (String(input.password || "") !== ADMIN_PASSWORD) {
+    if (String(input.password || "") !== getAdminPassword()) {
       throw new Error("管理员口令错误。");
     }
     const session = createSession(db, { role: "admin" });
@@ -67,5 +76,6 @@ function getAuth(db, token) {
 
 module.exports = {
   getAuth,
+  getAdminPassword,
   login
 };
