@@ -17,7 +17,17 @@ const state = {
   auctionEvents: null,
   inhouseEvents: null,
   countdownTimer: null,
-  currentPage: "hub"
+  currentPage: "hub",
+  homePlayerFilters: {
+    keyword: "",
+    position: "",
+    sort: "powerDesc"
+  },
+  adminPlayerFilters: {
+    keyword: "",
+    position: "",
+    sort: "powerDesc"
+  }
 };
 
 const app = document.querySelector("#app");
@@ -137,6 +147,147 @@ function getCurrentInhouse() {
 
 function getPlayer(id) {
   return state.players.find((player) => player.id === id) || null;
+}
+
+function filterPlayers(players, filters) {
+  const keyword = String(filters.keyword || "").trim().toLowerCase();
+  const position = String(filters.position || "").trim();
+  const sort = filters.sort === "powerAsc" ? "powerAsc" : "powerDesc";
+
+  return [...players]
+    .filter((player) => {
+      if (!keyword) {
+        return true;
+      }
+      return [player.id, player.displayName, player.wechatName, player.intro]
+        .filter(Boolean)
+        .some((value) => String(value).toLowerCase().includes(keyword));
+    })
+    .filter((player) => !position || player.positions.includes(position))
+    .sort((a, b) => {
+      if (sort === "powerAsc") {
+        return a.power - b.power || String(a.id).localeCompare(String(b.id));
+      }
+      return b.power - a.power || String(a.id).localeCompare(String(b.id));
+    });
+}
+
+function getEventAuction(eventId) {
+  return state.auctions.find((auction) => auction.eventId === eventId) || null;
+}
+
+function getEventPhaseMeta(event) {
+  const auction = getEventAuction(event.id);
+  if (auction?.status === "running") {
+    return { label: "拍卖中", tone: "phase-live", detail: "队长正在对剩余选手竞价" };
+  }
+  if (auction?.status === "paused") {
+    return { label: "拍卖暂停", tone: "phase-warning", detail: "管理员已暂停当前倒计时" };
+  }
+  if (event.inhouseStatus === "drafting") {
+    return { label: "选人中", tone: "phase-info", detail: "队长正在按当前轮次选人" };
+  }
+  if (event.signupOpen) {
+    return { label: "报名开放中", tone: "phase-live", detail: "玩家可以直接在首页完成报名" };
+  }
+  if (event.captainIds.length) {
+    return { label: "等待后续流程", tone: "phase-info", detail: "已任命队长，等待拍卖或选人继续" };
+  }
+  return { label: "报名已关闭", tone: "phase-muted", detail: "当前赛事暂未开放或已结束报名" };
+}
+
+function getDashboardStats() {
+  const openEvents = state.events.filter((event) => event.signupOpen).length;
+  const draftingEvents = state.events.filter((event) => event.inhouseStatus === "drafting").length;
+  const runningAuctions = state.auctions.filter((auction) => auction.status === "running").length;
+  return {
+    totalPlayers: state.players.length,
+    totalEvents: state.events.length,
+    openEvents,
+    draftingEvents,
+    runningAuctions
+  };
+}
+
+function renderMetricCards(metrics) {
+  return `
+    <section class="metric-grid">
+      ${metrics
+        .map(
+          (metric) => `
+            <article class="glass metric-card">
+              <span>${metric.label}</span>
+              <strong>${metric.value}</strong>
+              <small>${metric.caption}</small>
+            </article>
+          `
+        )
+        .join("")}
+    </section>
+  `;
+}
+
+function renderPlayerDirectory(filters, players, options = {}) {
+  const title = options.title || "玩家库";
+  const subtitle = options.subtitle || "按战力、位置和关键词快速筛选";
+  const keywordId = options.keywordId || "directory-keyword";
+  const positionId = options.positionId || "directory-position";
+  const sortId = options.sortId || "directory-sort";
+  const emptyText = options.emptyText || "暂时没有符合条件的玩家。";
+
+  return `
+    <section class="glass directory-shell">
+      <div class="card-head">
+        <div>
+          <h2>${title}</h2>
+          <span>${subtitle}</span>
+        </div>
+        <span>${players.length} 名玩家</span>
+      </div>
+      <div class="toolbar-grid">
+        <label>关键词
+          <input id="${keywordId}" type="text" value="${filters.keyword}" placeholder="昵称、数字 ID、微信名" />
+        </label>
+        <label>位置
+          <select id="${positionId}">
+            <option value="">全部位置</option>
+            ${["1", "2", "3", "4", "5"].map((position) => `<option value="${position}" ${filters.position === position ? "selected" : ""}>${position} 号位</option>`).join("")}
+          </select>
+        </label>
+        <label>排序
+          <select id="${sortId}">
+            <option value="powerDesc" ${filters.sort === "powerDesc" ? "selected" : ""}>战力从高到低</option>
+            <option value="powerAsc" ${filters.sort === "powerAsc" ? "selected" : ""}>战力从低到高</option>
+          </select>
+        </label>
+      </div>
+      <div class="directory-list">
+        ${
+          players.length
+            ? players
+                .map(
+                  (player) => `
+                    <article class="directory-card">
+                      <div class="directory-card-head">
+                        <div class="mini-avatar">${player.displayName.slice(0, 1)}</div>
+                        <div>
+                          <strong>${player.displayName}</strong>
+                          <p>ID ${player.id} · 战力 ${player.power} · 分数 ${player.mmr}</p>
+                        </div>
+                      </div>
+                      <div class="hero-tags compact-tags">
+                        ${(player.positions || []).map((position) => `<span class="tag">位置 ${position}</span>`).join("")}
+                      </div>
+                      <p class="directory-intro">${player.intro || "这个玩家还没有填写个人简介。"}</p>
+                    </article>
+                  `
+                )
+                .join("")
+            : `<p class="muted-line">${emptyText}</p>`
+        }
+      </div>
+    </section>
+  `;
 }
 
 function isAdmin() {
@@ -267,9 +418,49 @@ function renderPageNav() {
 }
 
 function renderPlayerHome() {
+  const spotlightEvent = state.events[0] || null;
+  const filteredPlayers = filterPlayers(state.players, state.homePlayerFilters);
+  const stats = getDashboardStats();
+  const spotlightMeta = spotlightEvent ? getEventPhaseMeta(spotlightEvent) : null;
   return `
     <section class="player-home">
       ${renderAuthPanel()}
+      ${renderMetricCards([
+        { label: "当前赛事", value: stats.totalEvents, caption: "首页统一查看所有赛事进度" },
+        { label: "开放报名", value: stats.openEvents, caption: "开放中赛事会有动态状态提示" },
+        { label: "选人进行中", value: stats.draftingEvents, caption: "队长轮次会同步到内战页" },
+        { label: "玩家库", value: stats.totalPlayers, caption: "玩家资料可按战力和位置筛选" }
+      ])}
+      ${
+        spotlightEvent
+          ? `
+            <section class="glass spotlight-shell">
+              <div class="spotlight-main">
+                <p class="eyebrow">Event Spotlight</p>
+                <h2>${spotlightEvent.name}</h2>
+                <p class="subcopy">${spotlightMeta.detail} · 开始时间 ${formatDate(spotlightEvent.startTime)}</p>
+                <div class="hero-tags">
+                  <span class="tag ${spotlightMeta.tone}">${spotlightMeta.label}</span>
+                  <span class="tag">已报名 ${spotlightEvent.signupCount}</span>
+                  <span class="tag">队长 ${spotlightEvent.captainIds.length}</span>
+                </div>
+              </div>
+              <div class="spotlight-side">
+                <span>当前最适合操作</span>
+                <strong>${
+                  state.auth.role === "player"
+                    ? spotlightEvent.signedUp
+                      ? "你已在该赛事名单中，可在首页取消报名"
+                      : spotlightEvent.signupOpen
+                        ? "可直接在首页完成报名"
+                        : "等待管理员重新开放报名"
+                    : "先登录玩家账号参与报名，或用管理员账号推进赛事"
+                }</strong>
+              </div>
+            </section>
+          `
+          : ""
+      }
       <section class="glass player-event-shell">
         <div class="card-head">
           <div>
@@ -286,7 +477,8 @@ function renderPlayerHome() {
                   <div>
                     <strong>${event.name}</strong>
                     <p>开始时间：${formatDate(event.startTime)}</p>
-                    <p>报名状态：<span class="${event.signupOpen ? "status-live" : "status-closed"}">${event.signupOpen ? "开放中" : "已关闭"}</span> · 已报名 ${event.signupCount} 人</p>
+                    <p>赛事阶段：<span class="status-badge ${getEventPhaseMeta(event).tone}">${getEventPhaseMeta(event).label}</span></p>
+                    <p>报名状态：<span class="${event.signupOpen ? "status-live" : "status-closed"}">${event.signupOpen ? "开放中" : "已关闭"}</span> · 已报名 ${event.signupCount} 人 · 队长 ${event.captainIds.length} 人</p>
                   </div>
                   <div class="row-actions">
                     <button data-player-signup="${event.id}" class="success-button" ${event.signupOpen && !event.signedUp ? "" : "disabled"}>报名</button>
@@ -298,6 +490,14 @@ function renderPlayerHome() {
             .join("")}
         </div>
       </section>
+      ${renderPlayerDirectory(state.homePlayerFilters, filteredPlayers, {
+        title: "公开玩家库",
+        subtitle: "让参赛者先看清当前社区里有哪些人、擅长什么位置",
+        keywordId: "home-player-keyword",
+        positionId: "home-player-position",
+        sortId: "home-player-sort",
+        emptyText: "没有符合当前筛选条件的公开玩家。"
+      })}
     </section>
   `;
 }
@@ -306,13 +506,41 @@ function renderAdminWorkspace() {
   const event = getCurrentEvent();
   const auction = getCurrentAuction();
   const eventPlayers = event ? state.players.filter((player) => event.signupIds?.includes(player.id)) : [];
+  const filteredPlayers = filterPlayers(state.players, state.adminPlayerFilters);
   const selectedPlayer = state.players.find((player) => player.id === state.editingPlayerId) || null;
+  const stats = getDashboardStats();
+  const availableSignupPlayers = event
+    ? state.players.filter((player) => !event.signupIds?.includes(player.id))
+    : state.players;
   return `
+    ${renderMetricCards([
+      { label: "玩家总数", value: stats.totalPlayers, caption: "玩家库随时支持新增、编辑、筛选" },
+      { label: "赛事总数", value: stats.totalEvents, caption: "可以删除、关闭报名、重建流程" },
+      { label: "报名开放中", value: stats.openEvents, caption: "还允许继续报名的赛事数量" },
+      { label: "拍卖进行中", value: stats.runningAuctions, caption: "需要主持人关注倒计时的拍卖" }
+    ])}
     <section class="workspace-grid">
       <div class="glass admin-card">
         <div class="card-head">
           <h2>玩家库管理</h2>
-          <span>${state.players.length} 名玩家</span>
+          <span>${filteredPlayers.length}/${state.players.length} 名玩家</span>
+        </div>
+        <div class="toolbar-grid">
+          <label>关键词
+            <input id="admin-player-keyword" type="text" value="${state.adminPlayerFilters.keyword}" placeholder="搜索昵称、数字 ID、微信名" />
+          </label>
+          <label>位置
+            <select id="admin-player-position">
+              <option value="">全部位置</option>
+              ${["1", "2", "3", "4", "5"].map((position) => `<option value="${position}" ${state.adminPlayerFilters.position === position ? "selected" : ""}>${position} 号位</option>`).join("")}
+            </select>
+          </label>
+          <label>排序
+            <select id="admin-player-sort">
+              <option value="powerDesc" ${state.adminPlayerFilters.sort === "powerDesc" ? "selected" : ""}>战力从高到低</option>
+              <option value="powerAsc" ${state.adminPlayerFilters.sort === "powerAsc" ? "selected" : ""}>战力从低到高</option>
+            </select>
+          </label>
         </div>
         <form id="player-form" class="grid-form">
           <input type="hidden" name="currentId" value="${selectedPlayer?.id || ""}" />
@@ -329,7 +557,7 @@ function renderAdminWorkspace() {
           </div>
         </form>
         <div class="table-list">
-          ${state.players
+          ${filteredPlayers
             .map(
               (player) => `
                 <div class="table-row">
@@ -373,6 +601,19 @@ function renderAdminWorkspace() {
                 <button type="button" id="delete-event-button" class="ghost-button">删除赛事</button>
               </div>
             </div>
+            <div class="event-overview-list">
+              ${state.events
+                .map((item) => {
+                  const meta = getEventPhaseMeta(item);
+                  return `
+                    <button type="button" class="event-overview-card ${item.id === event.id ? "selected-overview" : ""}" data-select-event="${item.id}">
+                      <strong>${item.name}</strong>
+                      <span>${meta.label} · 报名 ${item.signupCount}</span>
+                    </button>
+                  `;
+                })
+                .join("")}
+            </div>
             <div class="event-summary">
               <div><strong>${event.signupCount}</strong><span>已报名</span></div>
               <div><strong>${event.captainIds.length}</strong><span>已任命队长</span></div>
@@ -398,10 +639,10 @@ function renderAdminWorkspace() {
             <div class="selection-bar top-space">
               <label>管理员代报名到当前赛事
                 <select id="admin-signup-player">
-                  ${state.players.map((player) => `<option value="${player.id}">${player.displayName} (${player.id})</option>`).join("")}
+                  ${availableSignupPlayers.length ? availableSignupPlayers.map((player) => `<option value="${player.id}">${player.displayName} (${player.id})</option>`).join("") : '<option value="">当前所有玩家都已在该赛事中</option>'}
                 </select>
               </label>
-              <button type="button" id="admin-signup-button">代报名</button>
+              <button type="button" id="admin-signup-button" ${availableSignupPlayers.length ? "" : "disabled"}>代报名</button>
             </div>
           `
             : `<p class="muted-line">先创建一个赛事，再进行报名和队长任命。</p>`
@@ -445,6 +686,26 @@ function renderAdminWorkspace() {
           }
           <div class="form-actions full"><button type="submit">创建拍卖</button></div>
         </form>
+        ${
+          event
+            ? `
+              <div class="auction-readiness">
+                <div class="price-box">
+                  <span>当前赛事阶段</span>
+                  <strong>${getEventPhaseMeta(event).label}</strong>
+                </div>
+                <div class="price-box">
+                  <span>已任命队长</span>
+                  <strong>${event.captainIds.length}</strong>
+                </div>
+                <div class="price-box">
+                  <span>报名人数</span>
+                  <strong>${event.signupCount}</strong>
+                </div>
+              </div>
+            `
+            : ""
+        }
         ${
           auction
             ? `
@@ -752,6 +1013,54 @@ function render() {
 }
 
 function bindEvents() {
+  const homePlayerKeyword = document.querySelector("#home-player-keyword");
+  if (homePlayerKeyword) {
+    homePlayerKeyword.addEventListener("input", () => {
+      state.homePlayerFilters.keyword = homePlayerKeyword.value;
+      render();
+    });
+  }
+
+  const homePlayerPosition = document.querySelector("#home-player-position");
+  if (homePlayerPosition) {
+    homePlayerPosition.addEventListener("change", () => {
+      state.homePlayerFilters.position = homePlayerPosition.value;
+      render();
+    });
+  }
+
+  const homePlayerSort = document.querySelector("#home-player-sort");
+  if (homePlayerSort) {
+    homePlayerSort.addEventListener("change", () => {
+      state.homePlayerFilters.sort = homePlayerSort.value;
+      render();
+    });
+  }
+
+  const adminPlayerKeyword = document.querySelector("#admin-player-keyword");
+  if (adminPlayerKeyword) {
+    adminPlayerKeyword.addEventListener("input", () => {
+      state.adminPlayerFilters.keyword = adminPlayerKeyword.value;
+      render();
+    });
+  }
+
+  const adminPlayerPosition = document.querySelector("#admin-player-position");
+  if (adminPlayerPosition) {
+    adminPlayerPosition.addEventListener("change", () => {
+      state.adminPlayerFilters.position = adminPlayerPosition.value;
+      render();
+    });
+  }
+
+  const adminPlayerSort = document.querySelector("#admin-player-sort");
+  if (adminPlayerSort) {
+    adminPlayerSort.addEventListener("change", () => {
+      state.adminPlayerFilters.sort = adminPlayerSort.value;
+      render();
+    });
+  }
+
   const adminLoginForm = document.querySelector("#admin-login-form");
   if (adminLoginForm) {
     adminLoginForm.addEventListener("submit", async (event) => {
@@ -957,6 +1266,17 @@ function bindEvents() {
     });
   }
 
+  document.querySelectorAll("[data-select-event]").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.selectedEventId = button.getAttribute("data-select-event");
+      state.selectedInhouseId =
+        state.inhouseSessions.find((session) => session.eventId === state.selectedEventId)?.id || "";
+      state.selectedCaptainIds = [];
+      connectStreams();
+      render();
+    });
+  });
+
   const inhouseEventSwitcher = document.querySelector("#inhouse-event-switcher");
   if (inhouseEventSwitcher) {
     inhouseEventSwitcher.addEventListener("change", () => {
@@ -1055,7 +1375,7 @@ function bindEvents() {
       event.preventDefault();
       const formData = new FormData(auctionForm);
       const budgetMap = {};
-      const currentEvent = getCurrentEvent();
+      const currentEvent = state.events.find((item) => item.id === formData.get("eventId")) || getCurrentEvent();
       currentEvent?.captains?.forEach((captain) => {
         budgetMap[captain.id] = Number(formData.get(`budget_${captain.id}`) || 0);
       });
