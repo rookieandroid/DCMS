@@ -67,15 +67,22 @@ node --test
 ```
 
 ## 线上部署信息
-- 线上地址：
-  - [https://dcmsdota.com](https://dcmsdota.com)
-  - [https://www.dcmsdota.com](https://www.dcmsdota.com)
+- 当前可用入口：
+  - [http://150.158.55.21](http://150.158.55.21)
+- 域名状态：
+  - `dcmsdota.com` 与 `www.dcmsdota.com` 曾经已配置 HTTPS
+  - 因工信部备案原因，域名当前已暂时关闭，不作为现阶段访问入口
+- 临时访问说明：
+  - 当前 `nginx` 已增加 IP 访问配置
+  - 玩家现阶段通过公网 IP 临时访问系统
 - 服务器系统：Ubuntu 22.04
 - 服务器公网 IP：`150.158.55.21`
 - 部署目录：`/var/www/DCMS`
 - 进程管理：`pm2`
 - PM2 应用名：`dcms`
-- Nginx 已配置 HTTPS 反向代理
+- Nginx 当前同时支持：
+  - 域名 HTTPS 配置保留
+  - 公网 IP 的 HTTP 临时访问
 
 ## 线上运行方式
 - PM2 配置文件：`/var/www/DCMS/ecosystem.config.cjs`
@@ -99,6 +106,7 @@ node --test
 - 本地 GitHub 推送正常
 - 服务器尚未配置 GitHub 拉取凭据
 - 最近一次发布使用了“同步变更文件到服务器 + PM2 重启”的方式
+- 由于域名暂时关闭，最近一次运维还额外调整了 `nginx`，允许 `http://150.158.55.21` 直接访问应用
 
 ## 常用运维命令
 - 查看 PM2 状态：
@@ -130,6 +138,7 @@ pm2 save
 
 ## 建议下一步
 - 给服务器配置 GitHub SSH 凭据，恢复标准 `git pull` 发布流程
+- 域名备案完成后，恢复 `dcmsdota.com` 作为正式入口，并视情况重新开启强制 HTTPS
 - 增加赛事编辑能力
 - 增加玩家批量导入
 - 拍卖页和内战页继续做大屏化视觉增强
@@ -137,5 +146,5 @@ pm2 save
 
 ## 给下一次 Codex 的推荐提示词
 ```text
-这是 DCMS 项目，请先阅读 PROJECT_STATUS.md 和仓库代码。当前线上域名是 https://dcmsdota.com ，服务器是 Ubuntu 22.04，部署目录 /var/www/DCMS，pm2 进程名 dcms，nginx 已配置 HTTPS。请基于当前仓库继续开发，不要改动生产口令，只修改代码和必要的部署脚本。
+这是 DCMS 项目，请先阅读 PROJECT_STATUS.md 和仓库代码。当前正式域名 dcmsdota.com 因备案原因暂时关闭，现阶段线上入口是 http://150.158.55.21 。服务器是 Ubuntu 22.04，部署目录 /var/www/DCMS，pm2 进程名 dcms，nginx 保留了域名 HTTPS 配置，同时增加了 IP 的 HTTP 临时访问。请基于当前仓库继续开发，不要改动生产口令，只修改代码和必要的部署脚本。
 ```
