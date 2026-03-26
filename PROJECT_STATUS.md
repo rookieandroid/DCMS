@@ -108,9 +108,11 @@ node --test
 当前实际情况：
 - 本地 GitHub 推送正常
 - 服务器 GitHub SSH deploy key 已配置完成，`ssh -T git@github.com` 已验证通过
-- 服务器理论上已经可以直接 `git pull origin main`
-- 但服务器部署目录当前工作区不干净，直接 `git pull` 仍可能因本地改动冲突而中断
-- 最近一次发布仍使用了“同步变更文件到服务器 + PM2 重启”的方式
+- 服务器部署目录已清理并重新对齐到 GitHub 最新主分支
+- 当前服务器已经可以直接执行标准 `git pull origin main`
+- 线上数据文件 `data/dcms-db.json` 已在服务器上标记为 `skip-worktree`，避免运行期数据阻塞发布
+- 服务器本地运行文件 `data/audit.log`、`ecosystem.config.cjs` 已加入 `.git/info/exclude`
+- 当前已经具备正式的 `git pull + pm2 restart` 发布链路
 - 由于域名暂时关闭，最近一次运维还额外调整了 `nginx`，允许 `http://150.158.55.21` 直接访问应用
 
 ## 常用运维命令
@@ -127,6 +129,17 @@ pm2 logs dcms
 pm2 restart /var/www/DCMS/ecosystem.config.cjs --update-env
 pm2 save
 ```
+- 标准发布：
+```bash
+ssh root@150.158.55.21
+cd /var/www/DCMS
+/usr/local/bin/deploy_dcms
+```
+
+发布脚本会执行：
+- `git pull origin main`
+- `npm install --omit=dev`
+- `pm2 restart dcms`
 
 ## 审计与安全
 - 审计日志位置：`/var/www/DCMS/data/audit.log`
@@ -162,14 +175,14 @@ pm2 save
 - 公开玩家库输入交互稳定性修复
 
 ## 建议下一步
-- 清理服务器 `/var/www/DCMS` 工作区，把部署目录恢复到可直接 `git pull` 的干净状态
 - 域名备案完成后，恢复 `dcmsdota.com` 作为正式入口，并视情况重新开启强制 HTTPS
 - 增加赛事编辑能力
 - 增加 Excel 导入的后台进度反馈与失败明细
 - 拍卖页和内战页继续做大屏化视觉增强
 - 逐步把 JSON 存储迁移到数据库
+- 处理 `xlsx` 依赖带来的 `1 high severity vulnerability`
 
 ## 给下一次 Codex 的推荐提示词
 ```text
-这是 DCMS 项目，请先阅读 PROJECT_STATUS.md 和仓库代码。当前正式域名 dcmsdota.com 因备案原因暂时关闭，现阶段线上入口是 http://150.158.55.21 。服务器是 Ubuntu 22.04，部署目录 /var/www/DCMS，pm2 进程名 dcms，nginx 保留了域名 HTTPS 配置，同时增加了 IP 的 HTTP 临时访问。服务器 GitHub deploy key 已配置完成，ssh 认证通过，但部署目录当前工作区不干净，直接 git pull 前要先检查并清理冲突文件。请基于当前仓库继续开发，不要改动生产口令，只修改代码和必要的部署脚本。
+这是 DCMS 项目，请先阅读 PROJECT_STATUS.md 和仓库代码。当前正式域名 dcmsdota.com 因备案原因暂时关闭，现阶段线上入口是 http://150.158.55.21 。服务器是 Ubuntu 22.04，部署目录 /var/www/DCMS，pm2 进程名 dcms，nginx 保留了域名 HTTPS 配置，同时增加了 IP 的 HTTP 临时访问。服务器 GitHub deploy key 已配置完成，部署目录已经清理过，现在可以直接使用 /usr/local/bin/deploy_dcms 进行标准发布。请基于当前仓库继续开发，不要改动生产口令，只修改代码和必要的部署脚本。
 ```
