@@ -250,12 +250,12 @@
       "positions": [
         "1"
       ],
-      "intro": "大猛1",
+      "intro": "",
       "championships": 0,
       "avatar": "",
       "isPublic": true,
       "createdAt": "2026-03-19T08:50:01.994Z",
-      "updatedAt": "2026-03-19T08:50:01.994Z"
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
     },
     {
       "id": "1013",
@@ -272,6 +272,1029 @@
       "isPublic": true,
       "createdAt": "2026-03-19T10:01:56.552Z",
       "updatedAt": "2026-03-19T10:01:56.552Z"
+    },
+    {
+      "id": "176191301",
+      "displayName": "兆焱",
+      "wechatName": "兆焱",
+      "mmr": 8900,
+      "power": 90,
+      "positions": [
+        "2"
+      ],
+      "championships": 2,
+      "intro": "上帝",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "1004877057",
+      "displayName": "秋",
+      "wechatName": "秋",
+      "mmr": 9000,
+      "power": 90,
+      "positions": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "championships": 2,
+      "intro": "脚踢小雪，拳打鱼畜",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "187933845",
+      "displayName": "赤夜紫雨",
+      "wechatName": "赤夜紫雨",
+      "mmr": 8100,
+      "power": 89,
+      "positions": [
+        "1",
+        "3"
+      ],
+      "championships": 1,
+      "intro": "武痴",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "187468758",
+      "displayName": "蜡笔大雪",
+      "wechatName": "蜡笔大雪",
+      "mmr": 9000,
+      "power": 88,
+      "positions": [
+        "3",
+        "4",
+        "5",
+        "1"
+      ],
+      "championships": 1,
+      "intro": "精品洋葱头（专治扛起进攻大旗的三号位，超级贱狗）",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "136801289",
+      "displayName": "风Ain-t",
+      "wechatName": "风Ain-t",
+      "mmr": 8750,
+      "power": 88,
+      "positions": [
+        "1"
+      ],
+      "championships": 1,
+      "intro": "cc是我师傅（热辣舞男）",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "341670770",
+      "displayName": "大蟑螂",
+      "wechatName": "大蟑螂",
+      "mmr": 9000,
+      "power": 87,
+      "positions": [
+        "2"
+      ],
+      "championships": 1,
+      "intro": "保雨派",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "381057664",
+      "displayName": "所念皆星河",
+      "wechatName": "所念皆星河",
+      "mmr": 8500,
+      "power": 85,
+      "positions": [
+        "1",
+        "2"
+      ],
+      "championships": 1,
+      "intro": "温文尔雅",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "106964785",
+      "displayName": "笑败",
+      "wechatName": "笑败",
+      "mmr": 8330,
+      "power": 84,
+      "positions": [
+        "1"
+      ],
+      "championships": 4,
+      "intro": "一三摇摆，二也能摇",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "299227181",
+      "displayName": "蒙面加菲猫",
+      "wechatName": "蒙面加菲猫",
+      "mmr": 8600,
+      "power": 83,
+      "positions": [
+        "1",
+        "3"
+      ],
+      "championships": 1,
+      "intro": "",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "266088396",
+      "displayName": "猪",
+      "wechatName": "猪",
+      "mmr": 8000,
+      "power": 83,
+      "positions": [
+        "3",
+        "4",
+        "5"
+      ],
+      "championships": 1,
+      "intro": "长的算了也就算了，打的也这么算了。",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "137306952",
+      "displayName": "Drugz",
+      "wechatName": "Drugz",
+      "mmr": 8900,
+      "power": 82,
+      "positions": [
+        "3"
+      ],
+      "championships": 0,
+      "intro": "哭胜（男同）",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "138558413",
+      "displayName": "阿魂呐",
+      "wechatName": "阿魂呐",
+      "mmr": 7500,
+      "power": 81,
+      "positions": [
+        "2"
+      ],
+      "championships": 2,
+      "intro": "只想干笑败",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "173964673",
+      "displayName": "Sdy",
+      "wechatName": "Sdy",
+      "mmr": 7800,
+      "power": 78,
+      "positions": [
+        "2",
+        "3"
+      ],
+      "championships": 0,
+      "intro": "一年半以前8100，后面没打过大号天梯了",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "383560624",
+      "displayName": "iqbs",
+      "wechatName": "iqbs",
+      "mmr": 7700,
+      "power": 77,
+      "positions": [
+        "4",
+        "5",
+        "3"
+      ],
+      "championships": 2,
+      "intro": "笑败粉丝",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "885588023",
+      "displayName": "YuuU",
+      "wechatName": "YuuU",
+      "mmr": 7000,
+      "power": 77,
+      "positions": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "championships": 0,
+      "intro": "？",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "267719332",
+      "displayName": "云天河",
+      "wechatName": "云天河",
+      "mmr": 7000,
+      "power": 76,
+      "positions": [
+        "2",
+        "4",
+        "5"
+      ],
+      "championships": 1,
+      "intro": "三猫一滚puck 拉席克女王小小，ling神毒唯",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "457383175",
+      "displayName": "黑色柳丁",
+      "wechatName": "黑色柳丁",
+      "mmr": 6500,
+      "power": 76,
+      "positions": [
+        "2"
+      ],
+      "championships": 0,
+      "intro": "笑败大神铁粉丝（忧郁王子）",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "277443592",
+      "displayName": "21",
+      "wechatName": "21",
+      "mmr": 6800,
+      "power": 75,
+      "positions": [
+        "1"
+      ],
+      "championships": 1,
+      "intro": "脚踢风仔的一号位（可爱水豚）",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "186753076",
+      "displayName": "一颗大白菜",
+      "wechatName": "一颗大白菜",
+      "mmr": 7500,
+      "power": 75,
+      "positions": [
+        "1",
+        "2",
+        "3"
+      ],
+      "championships": 0,
+      "intro": "啥都会一点",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "1259908216",
+      "displayName": "小牛",
+      "wechatName": "小牛",
+      "mmr": 7500,
+      "power": 75,
+      "positions": [
+        "2"
+      ],
+      "championships": 3,
+      "intro": "Dota思想家",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "401464166",
+      "displayName": "Ninelie",
+      "wechatName": "Ninelie",
+      "mmr": 6800,
+      "power": 70,
+      "positions": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "championships": 0,
+      "intro": "儒雅随和",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "355328125",
+      "displayName": "Summer丶夏",
+      "wechatName": "Summer丶夏",
+      "mmr": 6649,
+      "power": 68,
+      "positions": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "championships": 2,
+      "intro": "每个位置都可以打，眼位研究不多，需要练英雄扩池子",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "122810642",
+      "displayName": "柬埔寨智慧笼",
+      "wechatName": "柬埔寨智慧笼",
+      "mmr": 6000,
+      "power": 68,
+      "positions": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "championships": 0,
+      "intro": "超级大稿子",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "235611786",
+      "displayName": "哞哞",
+      "wechatName": "哞哞",
+      "mmr": 4300,
+      "power": 65,
+      "positions": [
+        "2"
+      ],
+      "championships": 1,
+      "intro": "混子中",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "108868178",
+      "displayName": "coconut",
+      "wechatName": "coconut",
+      "mmr": 6000,
+      "power": 64,
+      "positions": [
+        "2"
+      ],
+      "championships": 0,
+      "intro": "性价比中单。打谁都不怂 还什么都会",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "104465635",
+      "displayName": "睡衣大大",
+      "wechatName": "睡衣大大",
+      "mmr": 6000,
+      "power": 63,
+      "positions": [
+        "1",
+        "2"
+      ],
+      "championships": 2,
+      "intro": "老毕登",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "334481697",
+      "displayName": "）",
+      "wechatName": "）",
+      "mmr": 6000,
+      "power": 60,
+      "positions": [
+        "1",
+        "2",
+        "3"
+      ],
+      "championships": 0,
+      "intro": "",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "255882400",
+      "displayName": "洋芋",
+      "wechatName": "洋芋",
+      "mmr": 5900,
+      "power": 60,
+      "positions": [
+        "5",
+        "3",
+        "4"
+      ],
+      "championships": 0,
+      "intro": "听话",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "117970934",
+      "displayName": "温酒",
+      "wechatName": "温酒",
+      "mmr": 6000,
+      "power": 60,
+      "positions": [
+        "4"
+      ],
+      "championships": 0,
+      "intro": "太久没玩，需要复建，现在有点菜",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "154029585",
+      "displayName": "蜡笔小雪",
+      "wechatName": "蜡笔小雪",
+      "mmr": 6000,
+      "power": 60,
+      "positions": [
+        "3"
+      ],
+      "championships": 3,
+      "intro": "三号位是扛起进攻大旗的猛男，不是你们口中的贱狗（帅哥）（雨一三）",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "1255409177",
+      "displayName": "Jose",
+      "wechatName": "Jose",
+      "mmr": 6200,
+      "power": 59,
+      "positions": [
+        "3"
+      ],
+      "championships": 2,
+      "intro": "没办法兄弟，我穷点没事，三号位是这样的，尽力了我的吧",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "354618808",
+      "displayName": "END",
+      "wechatName": "END",
+      "mmr": 6000,
+      "power": 58,
+      "positions": [
+        "1",
+        "5"
+      ],
+      "championships": 1,
+      "intro": "我是笑败的忠臣",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "283200408",
+      "displayName": "yu",
+      "wechatName": "yu",
+      "mmr": 5600,
+      "power": 56,
+      "positions": [
+        "3",
+        "4"
+      ],
+      "championships": 0,
+      "intro": "保抢我无敌",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "223646770",
+      "displayName": "熊",
+      "wechatName": "熊",
+      "mmr": 5000,
+      "power": 55,
+      "positions": [
+        "4",
+        "5"
+      ],
+      "championships": 0,
+      "intro": "臭酱油一枚",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "117252110",
+      "displayName": "龙城林子",
+      "wechatName": "龙城林子",
+      "mmr": 4100,
+      "power": 55,
+      "positions": [
+        "2"
+      ],
+      "championships": 0,
+      "intro": "",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "417868870",
+      "displayName": "王亚祈",
+      "wechatName": "王亚祈",
+      "mmr": 5500,
+      "power": 55,
+      "positions": [
+        "1",
+        "4",
+        "5"
+      ],
+      "championships": 0,
+      "intro": "",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "242739321",
+      "displayName": "vamoose",
+      "wechatName": "vamoose",
+      "mmr": 5500,
+      "power": 55,
+      "positions": [
+        "1",
+        "3",
+        "4",
+        "5"
+      ],
+      "championships": 0,
+      "intro": "",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "140389337",
+      "displayName": "临江仙",
+      "wechatName": "临江仙",
+      "mmr": 5000,
+      "power": 54,
+      "positions": [
+        "1",
+        "2",
+        "4"
+      ],
+      "championships": 0,
+      "intro": "",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "189497913",
+      "displayName": "你也喜欢河马嘛",
+      "wechatName": "你也喜欢河马嘛",
+      "mmr": 5300,
+      "power": 53,
+      "positions": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "championships": 0,
+      "intro": "新人求不虐",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "208333479",
+      "displayName": "ZMJ 玖黎",
+      "wechatName": "ZMJ 玖黎",
+      "mmr": 5800,
+      "power": 52,
+      "positions": [
+        "1",
+        "2",
+        "3"
+      ],
+      "championships": 1,
+      "intro": "佛系青年",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "140594695",
+      "displayName": "黑山羊",
+      "wechatName": "黑山羊",
+      "mmr": 4900,
+      "power": 50,
+      "positions": [
+        "2",
+        "3",
+        "5"
+      ],
+      "championships": 2,
+      "intro": "✌️😛✌️",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "178988576",
+      "displayName": "风",
+      "wechatName": "风",
+      "mmr": 5000,
+      "power": 50,
+      "positions": [
+        "1",
+        "3"
+      ],
+      "championships": 0,
+      "intro": "复建选手",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "136537289",
+      "displayName": "。。~",
+      "wechatName": "。。~",
+      "mmr": 5000,
+      "power": 50,
+      "positions": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "championships": 0,
+      "intro": "赌",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "320479234",
+      "displayName": "PP",
+      "wechatName": "PP",
+      "mmr": 4990,
+      "power": 45,
+      "positions": [
+        "4",
+        "5"
+      ],
+      "championships": 2,
+      "intro": "对你的爱就像屎拉裤兜里 沉甸甸的 只有我自己知道",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "141166215",
+      "displayName": "dalinya.",
+      "wechatName": "dalinya.",
+      "mmr": 4500,
+      "power": 45,
+      "positions": [
+        "2",
+        "4"
+      ],
+      "championships": 0,
+      "intro": "QWQ",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "370449300",
+      "displayName": "授法",
+      "wechatName": "授法",
+      "mmr": 4500,
+      "power": 44,
+      "positions": [
+        "1",
+        "3"
+      ],
+      "championships": 0,
+      "intro": "很会抗压，不只玩憋壳形3。",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "138720710",
+      "displayName": "幺鸡",
+      "wechatName": "幺鸡",
+      "mmr": 3800,
+      "power": 44,
+      "positions": [
+        "4"
+      ],
+      "championships": 2,
+      "intro": "不准欺负狗屎心念！换我来！",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "101126670",
+      "displayName": "爱喝可乐的帅哥",
+      "wechatName": "爱喝可乐的帅哥",
+      "mmr": 3900,
+      "power": 42,
+      "positions": [
+        "1",
+        "4"
+      ],
+      "championships": 0,
+      "intro": "绝活海",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "148343069",
+      "displayName": "老K",
+      "wechatName": "老K",
+      "mmr": 4000,
+      "power": 40,
+      "positions": [
+        "2",
+        "4",
+        "5"
+      ],
+      "championships": 0,
+      "intro": "叫我哥哥或者叔叔",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "351772086",
+      "displayName": "游牧骑兵",
+      "wechatName": "游牧骑兵",
+      "mmr": 3000,
+      "power": 40,
+      "positions": [
+        "3",
+        "4",
+        "5"
+      ],
+      "championships": 1,
+      "intro": "捞陈、酒仙、小娜迦、维萨吉。",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "168661508",
+      "displayName": "芋头芭乐脑袋",
+      "wechatName": "芋头芭乐脑袋",
+      "mmr": 3400,
+      "power": 34,
+      "positions": [
+        "4",
+        "5"
+      ],
+      "championships": 0,
+      "intro": "叫我姐姐或者阿姨",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "400294058",
+      "displayName": "starling",
+      "wechatName": "starling",
+      "mmr": 4000,
+      "power": 34,
+      "positions": [
+        "4",
+        "5"
+      ],
+      "championships": 0,
+      "intro": "",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "124599786",
+      "displayName": "No",
+      "wechatName": "No",
+      "mmr": 3300,
+      "power": 33,
+      "positions": [
+        "2",
+        "4"
+      ],
+      "championships": 0,
+      "intro": "暖男",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "137784091",
+      "displayName": "芳心纵火犯",
+      "wechatName": "芳心纵火犯",
+      "mmr": 3200,
+      "power": 32,
+      "positions": [
+        "4",
+        "5"
+      ],
+      "championships": 0,
+      "intro": "什么花里胡哨的",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "245304772",
+      "displayName": "忧郁的苹果君",
+      "wechatName": "忧郁的苹果君",
+      "mmr": 3646,
+      "power": 30,
+      "positions": [
+        "4",
+        "5"
+      ],
+      "championships": 0,
+      "intro": "英雄勺哟！！！！！",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "136636318",
+      "displayName": "招财喵",
+      "wechatName": "招财喵",
+      "mmr": 3000,
+      "power": 30,
+      "positions": [
+        "4"
+      ],
+      "championships": 0,
+      "intro": "四五号，学学4号，但半途而废了（我也不想呀），现在只想继续学学学，跟大家一起进步进步进步",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "144220785",
+      "displayName": "尤也",
+      "wechatName": "尤也",
+      "mmr": 3000,
+      "power": 30,
+      "positions": [
+        "1"
+      ],
+      "championships": 0,
+      "intro": "",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "283980539",
+      "displayName": "绮怀.",
+      "wechatName": "绮怀.",
+      "mmr": 2000,
+      "power": 28,
+      "positions": [
+        "4",
+        "5",
+        "3",
+        "2",
+        "1"
+      ],
+      "championships": 2,
+      "intro": "躺狗（精品躺）",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
+    },
+    {
+      "id": "449128986",
+      "displayName": "小胖",
+      "wechatName": "小胖",
+      "mmr": 2900,
+      "power": 28,
+      "positions": [
+        "1",
+        "5"
+      ],
+      "championships": 0,
+      "intro": "心态好",
+      "avatar": "",
+      "isPublic": true,
+      "createdAt": "2026-03-26T09:26:50.000003Z",
+      "updatedAt": "2026-03-26T09:26:50.000003Z"
     }
   ],
   "events": [

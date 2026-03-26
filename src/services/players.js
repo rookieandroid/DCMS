@@ -1,5 +1,6 @@
 "use strict";
 
+const XLSX = require("xlsx");
 const { nowIso } = require("../lib/utils");
 
 function sanitizePlayer(player, auth) {
@@ -77,6 +78,34 @@ function assertAdmin(auth) {
   if (auth?.role !== "admin") {
     throw new Error("只有管理员可以执行该操作。");
   }
+}
+
+function normalizeImportedPositions(value) {
+  const map = {
+    "一": "1",
+    "二": "2",
+    "三": "3",
+    "四": "4",
+    "五": "5",
+    "1": "1",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5"
+  };
+
+  const raw = String(value || "")
+    .replace(/，/g, ",")
+    .replace(/、/g, ",")
+    .replace(/\//g, ",");
+  const result = [];
+  for (const part of raw.split(",")) {
+    const normalized = map[String(part || "").trim()];
+    if (normalized && !result.includes(normalized)) {
+      result.push(normalized);
+    }
+  }
+  return result;
 }
 
 function validatePlayerInput(input, currentPlayer) {
@@ -164,10 +193,96 @@ function deletePlayer(db, auth, playerId) {
   return { ok: true };
 }
 
+function importPlayersFromWorkbook(db, auth, input) {
+  assertAdmin(auth);
+
+  const contentBase64 = String(input.contentBase64 || "").trim();
+  if (!contentBase64) {
+    throw new Error("请先选择需要导入的 Excel 文件。");
+  }
+
+  const sheetName = String(input.sheetName || "S2名单").trim() || "S2名单";
+  const workbook = XLSX.read(Buffer.from(contentBase64, "base64"), { type: "buffer" });
+  const worksheet = workbook.Sheets[sheetName];
+  if (!worksheet) {
+    throw new Error(`未找到工作表：${sheetName}`);
+  }
+
+  const rows = XLSX.utils.sheet_to_json(worksheet, {
+    header: 1,
+    defval: ""
+  });
+  if (rows.length < 2) {
+    throw new Error("工作表中没有可导入的数据。");
+  }
+
+  const importedAt = nowIso();
+  const deduped = new Map();
+  for (const row of rows.slice(1)) {
+    const displayName = String(row[1] || "").trim();
+    const steamId = String(row[2] || "").trim();
+    if (!/^\d+$/.test(steamId)) {
+      continue;
+    }
+    const intro = String(row[7] || "").trim();
+    deduped.set(steamId, {
+      id: steamId,
+      displayName: displayName || steamId,
+      wechatName: displayName,
+      mmr: Number(row[4] || 0),
+      power: Math.max(0, Math.min(100, Number(row[3] || 0))),
+      positions: normalizeImportedPositions(row[5]),
+      championships: Number(row[6] || 0),
+      intro: intro === "0" ? "" : intro,
+      avatar: "",
+      isPublic: true
+    });
+  }
+
+  if (!deduped.size) {
+    throw new Error("没有解析到有效玩家数据，请检查 sheet 内容。");
+  }
+
+  let created = 0;
+  let updated = 0;
+  const importedPlayers = [];
+  for (const payload of deduped.values()) {
+    const existing = db.players.find((player) => player.id === payload.id);
+    if (existing) {
+      const createdAt = existing.createdAt || importedAt;
+      Object.assign(existing, payload, {
+        createdAt,
+        updatedAt: importedAt
+      });
+      updated += 1;
+      importedPlayers.push(sanitizePlayer(existing, auth));
+      continue;
+    }
+
+    const player = {
+      ...payload,
+      createdAt: importedAt,
+      updatedAt: importedAt
+    };
+    db.players.push(player);
+    created += 1;
+    importedPlayers.push(sanitizePlayer(player, auth));
+  }
+
+  return {
+    sheetName,
+    importedCount: deduped.size,
+    created,
+    updated,
+    players: importedPlayers
+  };
+}
+
 module.exports = {
   createPlayer,
   deletePlayer,
   getPlayer,
+  importPlayersFromWorkbook,
   listPlayers,
   sanitizePlayer,
   updatePlayer

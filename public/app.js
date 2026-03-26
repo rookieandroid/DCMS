@@ -542,6 +542,23 @@ function renderAdminWorkspace() {
             </select>
           </label>
         </div>
+        <div class="import-panel">
+          <div class="section-title slim">
+            <h4>Excel 导入玩家</h4>
+            <span>仅管理员可用，默认按 S2名单 sheet 导入到公开库</span>
+          </div>
+          <div class="toolbar-grid import-toolbar">
+            <label>选择 Excel 文件
+              <input id="player-import-file" type="file" accept=".xlsx,.xls" />
+            </label>
+            <label>工作表名称
+              <input id="player-import-sheet" type="text" value="S2名单" placeholder="例如：S2名单" />
+            </label>
+            <div class="import-actions">
+              <button type="button" id="player-import-button" class="action-button">导入到公开库</button>
+            </div>
+          </div>
+        </div>
         <form id="player-form" class="grid-form">
           <input type="hidden" name="currentId" value="${selectedPlayer?.id || ""}" />
           <label>数字 ID<input name="id" value="${selectedPlayer?.id || ""}" ${selectedPlayer ? "disabled" : ""} required /></label>
@@ -1193,6 +1210,53 @@ function bindEvents() {
           setNotice("玩家已新增。", "success");
         }
         state.editingPlayerId = "";
+        await refreshBootstrap();
+      } catch (error) {
+        setNotice(error.message, "error");
+        render();
+      }
+    });
+  }
+
+  const playerImportButton = document.querySelector("#player-import-button");
+  if (playerImportButton) {
+    playerImportButton.addEventListener("click", async () => {
+      const fileInput = document.querySelector("#player-import-file");
+      const sheetInput = document.querySelector("#player-import-sheet");
+      const file = fileInput?.files?.[0];
+      if (!file) {
+        setNotice("请先选择需要导入的 Excel 文件。", "error");
+        render();
+        return;
+      }
+
+      const contentBase64 = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const result = String(reader.result || "");
+          const [, base64 = ""] = result.split(",");
+          resolve(base64);
+        };
+        reader.onerror = () => reject(new Error("读取 Excel 文件失败。"));
+        reader.readAsDataURL(file);
+      });
+
+      try {
+        const payload = await api("/api/players/import", {
+          method: "POST",
+          body: JSON.stringify({
+            fileName: file.name,
+            sheetName: sheetInput?.value || "S2名单",
+            contentBase64
+          })
+        });
+        setNotice(
+          `导入完成：共 ${payload.importedCount} 条，新增 ${payload.created} 条，更新 ${payload.updated} 条。`,
+          "success"
+        );
+        if (fileInput) {
+          fileInput.value = "";
+        }
         await refreshBootstrap();
       } catch (error) {
         setNotice(error.message, "error");

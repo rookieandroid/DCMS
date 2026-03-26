@@ -2,8 +2,9 @@
 
 const test = require("node:test");
 const assert = require("node:assert/strict");
+const XLSX = require("xlsx");
 const { createSeedData } = require("../src/seed");
-const { createPlayer, listPlayers, updatePlayer } = require("../src/services/players");
+const { createPlayer, importPlayersFromWorkbook, listPlayers, updatePlayer } = require("../src/services/players");
 const { login, getAuth } = require("../src/services/auth");
 const { deleteEvent, signupForEvent, updateEvent } = require("../src/services/events");
 const { assignCaptains, makePick } = require("../src/services/inhouse");
@@ -42,6 +43,57 @@ test("编辑玩家时禁止修改数字 ID", () => {
         displayName: "兆焱"
       }),
     /不可修改/
+  );
+});
+
+test("管理员可以通过 Excel 导入玩家并更新同 steamid 数据", () => {
+  const db = freshDb();
+  const workbook = XLSX.utils.book_new();
+  const sheet = XLSX.utils.aoa_to_sheet([
+    ["序号", "微信昵称", "steamid", "战力", "分数", "擅长位置", "内战冠军次数", "自我介绍"],
+    ["1", "导入玩家A", "20001", "81", "7200", "一,三,五", "2", "测试导入"],
+    ["2", "兆焱S2", "1001", "82", "8100", "二,四", "1", "已更新"]
+  ]);
+  XLSX.utils.book_append_sheet(workbook, sheet, "S2名单");
+  const buffer = XLSX.write(workbook, { type: "buffer", bookType: "xlsx" });
+
+  const result = importPlayersFromWorkbook(db, { role: "admin" }, {
+    sheetName: "S2名单",
+    contentBase64: buffer.toString("base64")
+  });
+
+  assert.equal(result.importedCount, 2);
+  assert.equal(result.created, 1);
+  assert.equal(result.updated, 1);
+
+  const imported = db.players.find((player) => player.id === "20001");
+  assert.equal(imported.displayName, "导入玩家A");
+  assert.deepEqual(imported.positions, ["1", "3", "5"]);
+
+  const updated = db.players.find((player) => player.id === "1001");
+  assert.equal(updated.displayName, "兆焱S2");
+  assert.equal(updated.mmr, 8100);
+  assert.deepEqual(updated.positions, ["2", "4"]);
+  assert.equal(updated.intro, "已更新");
+});
+
+test("非管理员不能通过 Excel 导入玩家", () => {
+  const db = freshDb();
+  const workbook = XLSX.utils.book_new();
+  const sheet = XLSX.utils.aoa_to_sheet([
+    ["序号", "微信昵称", "steamid", "战力", "分数", "擅长位置", "内战冠军次数", "自我介绍"],
+    ["1", "导入玩家A", "20001", "81", "7200", "一", "2", "测试导入"]
+  ]);
+  XLSX.utils.book_append_sheet(workbook, sheet, "S2名单");
+  const buffer = XLSX.write(workbook, { type: "buffer", bookType: "xlsx" });
+
+  assert.throws(
+    () =>
+      importPlayersFromWorkbook(db, { role: "player", playerId: "1001" }, {
+        sheetName: "S2名单",
+        contentBase64: buffer.toString("base64")
+      }),
+    /管理员/
   );
 });
 

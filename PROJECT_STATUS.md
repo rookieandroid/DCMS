@@ -44,17 +44,17 @@
 - `内战选人页`
 
 ## 技术结构
-- 后端入口：[`server.js`](/Users/pomcat/Documents/New project/server.js)
-- 前端入口：[`public/app.js`](/Users/pomcat/Documents/New project/public/app.js)
-- 样式：[`public/styles.css`](/Users/pomcat/Documents/New project/public/styles.css)
+- 后端入口：[`server.js`](/Users/pomcat/Documents/DCMS/server.js)
+- 前端入口：[`public/app.js`](/Users/pomcat/Documents/DCMS/public/app.js)
+- 样式：[`public/styles.css`](/Users/pomcat/Documents/DCMS/public/styles.css)
 - 服务层：
-  - [`src/services/auth.js`](/Users/pomcat/Documents/New project/src/services/auth.js)
-  - [`src/services/players.js`](/Users/pomcat/Documents/New project/src/services/players.js)
-  - [`src/services/events.js`](/Users/pomcat/Documents/New project/src/services/events.js)
-  - [`src/services/inhouse.js`](/Users/pomcat/Documents/New project/src/services/inhouse.js)
-  - [`src/services/auctions.js`](/Users/pomcat/Documents/New project/src/services/auctions.js)
+  - [`src/services/auth.js`](/Users/pomcat/Documents/DCMS/src/services/auth.js)
+  - [`src/services/players.js`](/Users/pomcat/Documents/DCMS/src/services/players.js)
+  - [`src/services/events.js`](/Users/pomcat/Documents/DCMS/src/services/events.js)
+  - [`src/services/inhouse.js`](/Users/pomcat/Documents/DCMS/src/services/inhouse.js)
+  - [`src/services/auctions.js`](/Users/pomcat/Documents/DCMS/src/services/auctions.js)
 - 数据文件：
-  - [`data/dcms-db.json`](/Users/pomcat/Documents/New project/data/dcms-db.json)
+  - [`data/dcms-db.json`](/Users/pomcat/Documents/DCMS/data/dcms-db.json)
 
 ## 本地开发
 - 启动：

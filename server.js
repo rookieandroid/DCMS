@@ -10,6 +10,7 @@ const { getAdminPassword, getAuth, login } = require("./src/services/auth");
 const {
   createPlayer,
   deletePlayer,
+  importPlayersFromWorkbook,
   listPlayers,
   updatePlayer
 } = require("./src/services/players");
@@ -322,6 +323,36 @@ const server = http.createServer(async (req, res) => {
       sendJson(res, 201, payload);
     } catch (error) {
       sendJson(res, 400, { error: error.message || "创建玩家失败。" });
+    }
+    return;
+  }
+
+  if (req.method === "POST" && reqUrl.pathname === "/api/players/import") {
+    if (!enforceRateLimit(req, res, "players-import", 8, 60 * 1000)) {
+      return;
+    }
+    try {
+      const body = await readJson(req);
+      let authForAudit = { role: "guest" };
+      const payload = await mutateDb((db) => {
+        const auth = getAuth(db, getToken(req, reqUrl));
+        authForAudit = auth;
+        return importPlayersFromWorkbook(db, auth, body);
+      });
+      await appendAuditLog({
+        action: "player.import",
+        actor: describeActor(authForAudit),
+        ip: getClientIp(req),
+        details: {
+          sheetName: payload.sheetName,
+          importedCount: payload.importedCount,
+          created: payload.created,
+          updated: payload.updated
+        }
+      });
+      sendJson(res, 200, payload);
+    } catch (error) {
+      sendJson(res, 400, { error: error.message || "导入玩家失败。" });
     }
     return;
   }

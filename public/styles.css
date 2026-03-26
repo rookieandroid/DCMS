@@ -486,6 +486,25 @@ button:disabled {
   border: 1px solid var(--line);
 }
 
+.import-panel {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  margin-bottom: 18px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.68);
+  border: 1px solid var(--line);
+}
+
+.import-toolbar {
+  margin: 0;
+}
+
+.import-actions {
+  display: flex;
+  align-items: end;
+}
+
 .budget-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

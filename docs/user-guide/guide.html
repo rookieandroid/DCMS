@@ -1,0 +1,752 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DCMS 用户指南</title>
+    <style>
+      :root {
+        --ink: #172033;
+        --muted: #67748f;
+        --line: #dbe4f1;
+        --panel: #ffffff;
+        --panel-soft: #f6f9ff;
+        --brand: #4f7cff;
+        --brand-2: #39c3a3;
+        --accent: #ffb35c;
+        --shadow: 0 20px 50px rgba(42, 73, 132, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        background: #eef3fb;
+      }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        font-family: "PingFang SC", "Noto Sans SC", sans-serif;
+        background:
+          radial-gradient(circle at top left, rgba(148, 207, 255, 0.32), transparent 22%),
+          radial-gradient(circle at top right, rgba(157, 240, 214, 0.24), transparent 28%),
+          linear-gradient(180deg, #f8fbff 0%, #edf3fa 100%);
+      }
+
+      .book {
+        width: min(1120px, calc(100vw - 48px));
+        margin: 28px auto 60px;
+      }
+
+      .cover,
+      .page,
+      .toc {
+        background: var(--panel);
+        border: 1px solid rgba(132, 154, 197, 0.22);
+        border-radius: 28px;
+        box-shadow: var(--shadow);
+      }
+
+      .cover {
+        position: relative;
+        overflow: hidden;
+        padding: 52px;
+        min-height: 520px;
+        display: grid;
+        align-content: space-between;
+        background:
+          radial-gradient(circle at 82% 24%, rgba(79, 124, 255, 0.16), transparent 18%),
+          radial-gradient(circle at 15% 16%, rgba(57, 195, 163, 0.18), transparent 20%),
+          linear-gradient(140deg, #ffffff 0%, #f4f8ff 46%, #eef8f7 100%);
+      }
+
+      .cover::after {
+        content: "";
+        position: absolute;
+        right: -90px;
+        bottom: -120px;
+        width: 340px;
+        height: 340px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, rgba(79, 124, 255, 0.12), rgba(57, 195, 163, 0.14));
+      }
+
+      .cover-kicker {
+        font-size: 13px;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        color: var(--brand);
+        font-weight: 700;
+      }
+
+      .cover h1 {
+        margin: 18px 0 14px;
+        font-size: 56px;
+        line-height: 1.08;
+      }
+
+      .cover p {
+        max-width: 760px;
+        margin: 0;
+        font-size: 18px;
+        line-height: 1.8;
+        color: #42516d;
+      }
+
+      .meta-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+        margin-top: 34px;
+      }
+
+      .meta-card {
+        padding: 18px 20px;
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid rgba(122, 148, 197, 0.18);
+        backdrop-filter: blur(8px);
+      }
+
+      .meta-card span {
+        display: block;
+        color: var(--muted);
+        font-size: 13px;
+        margin-bottom: 8px;
+      }
+
+      .meta-card strong {
+        font-size: 19px;
+      }
+
+      .toc {
+        margin-top: 28px;
+        padding: 34px 38px;
+      }
+
+      .toc h2,
+      .page h2 {
+        margin: 0 0 18px;
+        font-size: 30px;
+      }
+
+      .toc-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px 28px;
+      }
+
+      .toc-item {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 12px 0;
+        border-bottom: 1px dashed var(--line);
+        color: #32435f;
+      }
+
+      .toc-item span:last-child {
+        color: var(--muted);
+      }
+
+      .page {
+        margin-top: 28px;
+        padding: 34px 38px 40px;
+      }
+
+      .section-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        align-items: end;
+        margin-bottom: 16px;
+      }
+
+      .section-head p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .section-index {
+        min-width: 52px;
+        height: 52px;
+        border-radius: 18px;
+        display: grid;
+        place-items: center;
+        font-weight: 800;
+        color: var(--brand);
+        background: rgba(79, 124, 255, 0.1);
+      }
+
+      .lead {
+        color: #42516d;
+        line-height: 1.85;
+        margin: 0 0 16px;
+      }
+
+      .info-band,
+      .role-grid,
+      .steps,
+      .qa-list {
+        display: grid;
+        gap: 16px;
+      }
+
+      .info-band {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        margin-top: 20px;
+      }
+
+      .info-card,
+      .role-card,
+      .step-card,
+      .qa-card {
+        border: 1px solid var(--line);
+        background: var(--panel-soft);
+        border-radius: 22px;
+        padding: 18px 20px;
+      }
+
+      .info-card span,
+      .role-card span,
+      .step-card span,
+      .qa-card span {
+        color: var(--muted);
+        display: block;
+        font-size: 13px;
+        margin-bottom: 8px;
+      }
+
+      .role-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .role-card h3,
+      .step-card h3,
+      .qa-card h3 {
+        margin: 0 0 10px;
+        font-size: 22px;
+      }
+
+      ul,
+      ol {
+        margin: 10px 0 0 20px;
+        padding: 0;
+        line-height: 1.85;
+      }
+
+      .shot-block {
+        margin-top: 22px;
+        border: 1px solid var(--line);
+        border-radius: 26px;
+        overflow: hidden;
+        background: #fff;
+      }
+
+      .shot-block img {
+        width: 100%;
+        display: block;
+      }
+
+      .shot-caption {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 14px 18px;
+        color: var(--muted);
+        background: #fbfdff;
+        border-top: 1px solid var(--line);
+        font-size: 14px;
+      }
+
+      .two-col {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 24px;
+        align-items: start;
+      }
+
+      .note {
+        margin-top: 18px;
+        padding: 16px 18px;
+        border-radius: 20px;
+        background: rgba(255, 179, 92, 0.12);
+        color: #72511c;
+        border: 1px solid rgba(255, 179, 92, 0.24);
+      }
+
+      .steps {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        margin-top: 18px;
+      }
+
+      .step-card strong {
+        color: var(--brand);
+      }
+
+      .page-break {
+        page-break-before: always;
+      }
+
+      .footer-note {
+        margin-top: 22px;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.75;
+      }
+
+      @media print {
+        @page {
+          size: A4;
+          margin: 14mm;
+        }
+
+        html,
+        body {
+          background: white;
+        }
+
+        .book {
+          width: 100%;
+          margin: 0;
+        }
+
+        .cover,
+        .page,
+        .toc {
+          box-shadow: none;
+          break-inside: avoid;
+        }
+
+        .cover,
+        .toc,
+        .page {
+          border-radius: 20px;
+        }
+
+        .page-break-print {
+          page-break-before: always;
+        }
+      }
+
+      @media (max-width: 900px) {
+        .book {
+          width: min(100vw - 20px, 100%);
+          margin: 12px auto 24px;
+        }
+
+        .cover,
+        .toc,
+        .page {
+          padding: 24px;
+          border-radius: 22px;
+        }
+
+        .cover h1 {
+          font-size: 40px;
+        }
+
+        .meta-grid,
+        .toc-grid,
+        .role-grid,
+        .steps,
+        .info-band,
+        .two-col {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="book">
+      <section class="cover">
+        <div>
+          <div class="cover-kicker">DCMS Manual</div>
+          <h1>刀塔社区赛综合管理系统<br />用户说明书</h1>
+          <p>
+            本说明书面向管理员、普通玩家与赛事队长，覆盖登录、赛事报名、玩家库管理、内战选人、拍卖配置与竞价操作，
+            适用于当前 DCMS MVP 版本。
+          </p>
+          <div class="meta-grid">
+            <article class="meta-card">
+              <span>当前入口</span>
+              <strong>http://150.158.55.21</strong>
+            </article>
+            <article class="meta-card">
+              <span>适用版本</span>
+              <strong>DCMS MVP</strong>
+            </article>
+            <article class="meta-card">
+              <span>更新日期</span>
+              <strong>2026-03-26</strong>
+            </article>
+          </div>
+        </div>
+        <div class="footer-note">
+          说明：当前正式域名因备案原因暂时关闭，本手册中的截图与操作路径基于当前线上演示环境自动生成。
+        </div>
+      </section>
+
+      <section class="toc">
+        <h2>目录</h2>
+        <div class="toc-grid">
+          <div class="toc-item"><span>1. 系统简介与适用范围</span><span>01</span></div>
+          <div class="toc-item"><span>2. 角色与权限说明</span><span>02</span></div>
+          <div class="toc-item"><span>3. 首页未登录状态</span><span>03</span></div>
+          <div class="toc-item"><span>4. 玩家登录后的首页</span><span>04</span></div>
+          <div class="toc-item"><span>5. 管理员登录后的首页</span><span>05</span></div>
+          <div class="toc-item"><span>6. 玩家库管理</span><span>06</span></div>
+          <div class="toc-item"><span>7. 赛事与报名管理</span><span>07</span></div>
+          <div class="toc-item"><span>8. 选手拍卖页</span><span>08</span></div>
+          <div class="toc-item"><span>9. 内战选人页</span><span>09</span></div>
+          <div class="toc-item"><span>10. 推荐使用流程</span><span>10</span></div>
+          <div class="toc-item"><span>11. 常见问题</span><span>11</span></div>
+          <div class="toc-item"><span>12. 附注与维护建议</span><span>12</span></div>
+        </div>
+      </section>
+
+      <section class="page page-break-print">
+        <div class="section-head">
+          <div>
+            <h2>系统简介与适用范围</h2>
+            <p>了解 DCMS 当前版本可支持的核心业务场景。</p>
+          </div>
+          <div class="section-index">01</div>
+        </div>
+        <p class="lead">
+          DCMS 是一个面向 DOTA2 社区赛事的轻量管理系统，当前版本聚焦于赛事组织最常用的流程：玩家库录入、数字 ID 登录、
+          赛事报名、队长任命、内战选人、拍卖配置与竞价展示。
+        </p>
+        <div class="info-band">
+          <article class="info-card">
+            <span>核心能力</span>
+            <strong>报名、选人、拍卖一体化</strong>
+          </article>
+          <article class="info-card">
+            <span>页面结构</span>
+            <strong>首页 / 选手拍卖页 / 内战选人页</strong>
+          </article>
+          <article class="info-card">
+            <span>当前访问方式</span>
+            <strong>公网 IP 临时访问</strong>
+          </article>
+        </div>
+      </section>
+
+      <section class="page">
+        <div class="section-head">
+          <div>
+            <h2>角色与权限说明</h2>
+            <p>根据不同使用者身份，系统提供差异化的操作入口。</p>
+          </div>
+          <div class="section-index">02</div>
+        </div>
+        <div class="role-grid">
+          <article class="role-card">
+            <span>角色一</span>
+            <h3>管理员</h3>
+            <ul>
+              <li>登录后台</li>
+              <li>管理玩家库</li>
+              <li>创建赛事与控制报名状态</li>
+              <li>任命队长并初始化赛事</li>
+              <li>创建拍卖、分配预算、暂停或继续拍卖</li>
+            </ul>
+          </article>
+          <article class="role-card">
+            <span>角色二</span>
+            <h3>普通玩家</h3>
+            <ul>
+              <li>使用数字 ID 登录</li>
+              <li>查看当前赛事</li>
+              <li>报名或取消报名</li>
+              <li>浏览公开玩家库</li>
+            </ul>
+          </article>
+          <article class="role-card">
+            <span>角色三</span>
+            <h3>队长</h3>
+            <ul>
+              <li>在内战选人页选择队员</li>
+              <li>在拍卖页代表队伍出价</li>
+              <li>查看队伍预算、阵容和当前轮次</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="page">
+        <div class="section-head">
+          <div>
+            <h2>首页未登录状态</h2>
+            <p>未登录时可先查看系统概况，并从首页进入不同身份入口。</p>
+          </div>
+          <div class="section-index">03</div>
+        </div>
+        <div class="two-col">
+          <div>
+            <p class="lead">
+              未登录时，首页会展示管理员登录入口、玩家数字 ID 登录入口、当前赛事概览和公开玩家库。访客可以先浏览信息，再决定以哪种身份进入系统。
+            </p>
+            <ol>
+              <li>管理员输入后台口令后进入后台工作区。</li>
+              <li>玩家输入自己的数字 ID 后进入前台首页。</li>
+              <li>未登录访客也可以先查看公开赛事信息和玩家资料。</li>
+            </ol>
+          </div>
+          <div class="note">
+            建议在赛事开始前，将管理员使用的后台口令和玩家的数字 ID 预先整理好，便于现场快速登录。
+          </div>
+        </div>
+        <div class="shot-block">
+          <img src="./01-home-guest.png" alt="首页未登录状态" />
+          <div class="shot-caption">
+            <span>图 1：DCMS 首页未登录状态</span>
+            <span>包含管理员登录、玩家登录与公开信息展示</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="page">
+        <div class="section-head">
+          <div>
+            <h2>玩家登录后的首页</h2>
+            <p>玩家登录后，首页聚焦“赛事报名”和“公开玩家库”。</p>
+          </div>
+          <div class="section-index">04</div>
+        </div>
+        <p class="lead">
+          玩家登录后，可直接查看当前可报名赛事、赛事阶段、报名人数和公开玩家库，并可在首页完成报名或取消报名操作。
+        </p>
+        <div class="steps">
+          <article class="step-card">
+            <span>玩家操作 01</span>
+            <h3>报名赛事</h3>
+            <p>找到开放报名的赛事，点击 <strong>报名</strong> 即可加入当前赛事。</p>
+          </article>
+          <article class="step-card">
+            <span>玩家操作 02</span>
+            <h3>取消报名</h3>
+            <p>如果已经报名，可点击 <strong>取消报名</strong> 退出当前赛事。</p>
+          </article>
+          <article class="step-card">
+            <span>玩家操作 03</span>
+            <h3>查看赛事阶段</h3>
+            <p>首页会显示赛事当前处于报名中、选人中或拍卖中的状态。</p>
+          </article>
+          <article class="step-card">
+            <span>玩家操作 04</span>
+            <h3>浏览玩家库</h3>
+            <p>可按关键词、位置和战力排序查看当前公开玩家资料。</p>
+          </article>
+        </div>
+        <div class="shot-block">
+          <img src="./02-home-player.png" alt="玩家登录首页" />
+          <div class="shot-caption">
+            <span>图 2：玩家登录后的首页</span>
+            <span>报名、取消报名与公开玩家库筛选都在同一页面完成</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="page">
+        <div class="section-head">
+          <div>
+            <h2>管理员登录后的首页</h2>
+            <p>管理员首页是整套系统的运营控制中心。</p>
+          </div>
+          <div class="section-index">05</div>
+        </div>
+        <p class="lead">
+          管理员登录后，首页会切换为后台工作区，集中展示玩家总数、赛事总数、当前报名状态和拍卖状态，并包含玩家库管理、赛事管理和拍卖配置三大区域。
+        </p>
+        <ol>
+          <li>在玩家库管理中新增、编辑、删除玩家。</li>
+          <li>在赛事与报名管理中创建赛事、开启或关闭报名、代玩家报名。</li>
+          <li>在赛事报名完成后勾选队长，并点击初始化赛事。</li>
+          <li>在拍卖配置管理中为不同队长设置不同预算并创建拍卖。</li>
+        </ol>
+        <div class="shot-block">
+          <img src="./03-home-admin.png" alt="管理员首页" />
+          <div class="shot-caption">
+            <span>图 3：管理员登录后的首页</span>
+            <span>玩家库、赛事与报名管理、拍卖配置管理集中在后台首页完成</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="page">
+        <div class="section-head">
+          <div>
+            <h2>玩家库与赛事管理</h2>
+            <p>管理员最常用的两块能力：维护玩家资料与推进赛事报名流程。</p>
+          </div>
+          <div class="section-index">06</div>
+        </div>
+        <div class="two-col">
+          <div>
+            <h3>玩家库管理</h3>
+            <ul>
+              <li>新增玩家</li>
+              <li>编辑玩家资料</li>
+              <li>删除未进入赛事流程的玩家</li>
+              <li>按关键词、位置、战力进行筛选</li>
+            </ul>
+            <h3>赛事与报名管理</h3>
+            <ul>
+              <li>创建赛事</li>
+              <li>开启或关闭报名</li>
+              <li>删除赛事</li>
+              <li>代玩家报名</li>
+              <li>从报名名单中选择队长并初始化赛事</li>
+            </ul>
+          </div>
+          <div class="note">
+            注意事项：数字 ID 必须唯一且创建后不可修改；队长必须来自当前赛事的报名名单；删除赛事会同时清理关联的内战和拍卖数据。
+          </div>
+        </div>
+      </section>
+
+      <section class="page">
+        <div class="section-head">
+          <div>
+            <h2>选手拍卖页</h2>
+            <p>适用于社区赛或拍卖建队场景，支持管理员控制拍卖节奏、队长实时竞价。</p>
+          </div>
+          <div class="section-index">07</div>
+        </div>
+        <div class="steps">
+          <article class="step-card">
+            <span>管理员能力</span>
+            <h3>控制拍卖状态</h3>
+            <p>管理员可启动拍卖，并在需要时暂停或继续倒计时。</p>
+          </article>
+          <article class="step-card">
+            <span>队长能力</span>
+            <h3>参与竞价</h3>
+            <p>队长可查看当前拍品、预算和竞价记录，并在允许时点击 <strong>我要出价</strong>。</p>
+          </article>
+          <article class="step-card">
+            <span>系统规则</span>
+            <h3>预算与加价限制</h3>
+            <p>出价必须满足当前加价要求，且不能超过本队剩余预算。</p>
+          </article>
+          <article class="step-card">
+            <span>系统规则</span>
+            <h3>自动成交或流拍</h3>
+            <p>倒计时结束后自动成交；若没有有效出价，选手会进入流拍列表。</p>
+          </article>
+        </div>
+        <div class="shot-block">
+          <img src="./04-auction-page.png" alt="选手拍卖页" />
+          <div class="shot-caption">
+            <span>图 4：选手拍卖页</span>
+            <span>左侧展示队伍，中央聚焦当前拍品，右侧显示未拍与流拍选手</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="page">
+        <div class="section-head">
+          <div>
+            <h2>内战选人页</h2>
+            <p>适用于传统内战建队，强调当前轮次、剩余选手池和队伍战力平衡。</p>
+          </div>
+          <div class="section-index">08</div>
+        </div>
+        <div class="steps">
+          <article class="step-card">
+            <span>页面区域</span>
+            <h3>报名面板</h3>
+            <p>展示当前报名情况，方便所有玩家查看报名列表。</p>
+          </article>
+          <article class="step-card">
+            <span>页面区域</span>
+            <h3>队长选人区</h3>
+            <p>当前轮到的队长可从剩余选手池中选择队员并确认。</p>
+          </article>
+          <article class="step-card">
+            <span>页面区域</span>
+            <h3>队伍与战力值</h3>
+            <p>实时展示各队成员数量和当前总战力，便于控制平衡。</p>
+          </article>
+          <article class="step-card">
+            <span>系统规则</span>
+            <h3>轮次限制</h3>
+            <p>只有当前轮到的队长可以选人，其他队长无法越权操作。</p>
+          </article>
+        </div>
+        <div class="shot-block">
+          <img src="./05-inhouse-page.png" alt="内战选人页" />
+          <div class="shot-caption">
+            <span>图 5：内战选人页</span>
+            <span>中间聚焦当前选手池，右侧显示队伍阵容与总战力</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="page">
+        <div class="section-head">
+          <div>
+            <h2>推荐使用流程与常见问题</h2>
+            <p>建议按照以下顺序推进赛事，避免中途流程错乱。</p>
+          </div>
+          <div class="section-index">09</div>
+        </div>
+        <div class="steps">
+          <article class="step-card">
+            <span>内战流程</span>
+            <h3>从报名到选人</h3>
+            <ol>
+              <li>录入玩家库</li>
+              <li>创建赛事</li>
+              <li>开启报名</li>
+              <li>玩家报名</li>
+              <li>任命队长</li>
+              <li>初始化赛事</li>
+              <li>队长选人</li>
+            </ol>
+          </article>
+          <article class="step-card">
+            <span>拍卖流程</span>
+            <h3>从报名到竞价</h3>
+            <ol>
+              <li>创建赛事</li>
+              <li>玩家报名</li>
+              <li>任命队长</li>
+              <li>设置队长预算</li>
+              <li>创建拍卖</li>
+              <li>启动拍卖</li>
+              <li>队长竞价</li>
+            </ol>
+          </article>
+        </div>
+
+        <div class="qa-list" style="margin-top: 18px;">
+          <article class="qa-card">
+            <span>FAQ 01</span>
+            <h3>为什么玩家不能报名？</h3>
+            <p>请检查赛事是否开放报名、玩家是否已报名、登录时是否使用了正确的数字 ID。</p>
+          </article>
+          <article class="qa-card">
+            <span>FAQ 02</span>
+            <h3>为什么某个玩家不能被设为队长？</h3>
+            <p>队长必须来自当前赛事的报名名单，未报名玩家不能直接被任命为队长。</p>
+          </article>
+          <article class="qa-card">
+            <span>FAQ 03</span>
+            <h3>为什么队长不能选人或出价？</h3>
+            <p>通常是因为未轮到该队长、赛事尚未初始化、拍卖尚未开始，或预算与加价条件不满足。</p>
+          </article>
+        </div>
+
+        <div class="footer-note">
+          本说明书基于当前 DCMS MVP 版本与线上演示环境生成。由于系统数据会随着赛事操作变化，页面中展示的报名人数、队长名单、
+          拍卖状态等可能与实际实时数据不同。如后续新增 Excel 导入导出、更多角色权限或数据库能力，建议同步更新本说明书。
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
