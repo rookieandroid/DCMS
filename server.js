@@ -12,6 +12,7 @@ const {
   deletePlayer,
   importPlayersFromWorkbook,
   listPlayers,
+  syncPlayerAvatars,
   updatePlayer
 } = require("./src/services/players");
 const {
@@ -47,7 +48,10 @@ const auctionClients = new Map();
 const inhouseClients = new Map();
 
 function sendJson(res, statusCode, payload) {
-  res.writeHead(statusCode, { "Content-Type": "application/json; charset=utf-8" });
+  res.writeHead(statusCode, {
+    "Content-Type": "application/json; charset=utf-8",
+    "Cache-Control": "no-store"
+  });
   res.end(JSON.stringify(payload));
 }
 
@@ -353,6 +357,39 @@ const server = http.createServer(async (req, res) => {
       sendJson(res, 200, payload);
     } catch (error) {
       sendJson(res, 400, { error: error.message || "导入玩家失败。" });
+    }
+    return;
+  }
+
+  if (req.method === "POST" && reqUrl.pathname === "/api/players/sync-avatars") {
+    if (!enforceRateLimit(req, res, "players-avatar-sync", 3, 60 * 1000)) {
+      return;
+    }
+    try {
+      const body = await readJson(req);
+      let authForAudit = { role: "guest" };
+      const payload = await mutateDb(async (db) => {
+        const auth = getAuth(db, getToken(req, reqUrl));
+        authForAudit = auth;
+        return await syncPlayerAvatars(db, auth, {
+          refreshAll: body.refreshAll === true
+        });
+      });
+      await appendAuditLog({
+        action: "player.avatar.sync",
+        actor: describeActor(authForAudit),
+        ip: getClientIp(req),
+        details: {
+          scanned: payload.scanned,
+          updated: payload.updated,
+          skipped: payload.skipped,
+          failed: payload.failed,
+          refreshAll: payload.refreshAll
+        }
+      });
+      sendJson(res, 200, payload);
+    } catch (error) {
+      sendJson(res, 400, { error: error.message || "同步 Steam 头像失败。" });
     }
     return;
   }

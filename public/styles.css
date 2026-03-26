@@ -99,6 +99,33 @@ button,
   padding: 24px;
 }
 
+.admin-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: min(82vh, 1120px);
+  overflow: hidden;
+}
+
+.admin-card-body {
+  display: grid;
+  gap: 18px;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding-right: 4px;
+  overscroll-behavior: contain;
+}
+
+.player-library-card .admin-card-body {
+  align-content: start;
+}
+
+.event-management-card .admin-card-body,
+.auction-management-card .admin-card-body {
+  align-content: start;
+}
+
 .eyebrow,
 .stage-kicker,
 .session-role {
@@ -221,6 +248,17 @@ button:disabled {
   border: 1px solid var(--line);
 }
 
+.disabled-button,
+button:disabled.disabled-button {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: rgba(184, 191, 209, 0.22);
+  color: rgba(54, 66, 92, 0.72);
+  border-color: rgba(150, 160, 180, 0.35);
+  transform: none;
+  box-shadow: none;
+}
+
 .action-button {
   background: linear-gradient(135deg, #7788ff, #57b8ff);
 }
@@ -278,6 +316,7 @@ button:disabled {
 .workspace-grid {
   grid-template-columns: 1fr;
   margin-top: 24px;
+  align-items: start;
 }
 
 .table-list,
@@ -367,6 +406,49 @@ button:disabled {
   background: rgba(255, 255, 255, 0.62);
 }
 
+.check-card,
+.pick-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.check-card input,
+.pick-option input {
+  width: auto;
+  margin: 0;
+}
+
+.pick-option-main,
+.check-card-main {
+  flex: 1;
+}
+
+.table-row-main,
+.check-card-main,
+.pick-option-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.table-row-main {
+  flex: 1;
+}
+
+.table-row-copy,
+.check-card-copy,
+.pick-option-copy {
+  min-width: 0;
+}
+
+.table-row-copy strong,
+.check-card-copy span,
+.pick-option-copy span {
+  display: block;
+}
+
 .player-home {
   display: grid;
   gap: 24px;
@@ -383,6 +465,14 @@ button:disabled {
 .directory-shell {
   border-radius: 28px;
   padding: 24px;
+}
+
+.directory-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: min(78vh, 980px);
+  overflow: hidden;
 }
 
 .metric-card span,
@@ -530,6 +620,11 @@ button:disabled {
 
 .directory-list {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding-right: 4px;
+  overscroll-behavior: contain;
 }
 
 .directory-card {
@@ -569,6 +664,7 @@ button:disabled {
 .hero-avatar {
   display: grid;
   place-items: center;
+  overflow: hidden;
   border-radius: 999px;
   background: linear-gradient(135deg, #7d8cff, #67dfc4);
   color: white;
@@ -578,6 +674,18 @@ button:disabled {
 .mini-avatar {
   width: 42px;
   height: 42px;
+  flex: 0 0 42px;
+}
+
+.hero-avatar {
+  overflow: hidden;
+}
+
+.image-avatar img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
 }
 
 .auction-shell {
@@ -596,6 +704,7 @@ button:disabled {
   flex-direction: column;
   gap: 16px;
   min-height: 0;
+  max-height: min(78vh, 920px);
 }
 
 .left-panel {
@@ -618,6 +727,37 @@ button:disabled {
   max-height: none;
   min-height: 0;
   align-content: start;
+  overflow: auto;
+}
+
+.player-library-card .table-list {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  max-height: none;
+  overflow: visible;
+}
+
+.player-library-card .table-row {
+  display: grid;
+  gap: 10px;
+  align-items: start;
+  padding: 14px;
+}
+
+.player-library-card .row-actions {
+  justify-content: flex-start;
+}
+
+.player-library-card .row-actions button {
+  flex: 0 0 auto;
+}
+
+.event-management-card .checkbox-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.event-management-card .check-card {
+  align-items: flex-start;
+  min-height: 88px;
 }
 
 .section-title {
@@ -737,16 +877,50 @@ button:disabled {
 .inhouse-grid {
   grid-template-columns: 280px minmax(0, 1fr) 320px;
   margin-top: 20px;
+  align-items: stretch;
 }
 
 .pick-panel,
 .teams-panel,
 .signup-panel {
+  display: flex;
+  flex-direction: column;
   min-width: 0;
+  min-height: 0;
+  max-height: min(78vh, 920px);
 }
 
 .compact-history {
   margin-top: 16px;
+}
+
+.inhouse-scroll,
+.inhouse-history-scroll,
+.inhouse-team-scroll {
+  min-height: 0;
+  overflow: auto;
+}
+
+.signup-panel .inhouse-scroll {
+  flex: 1;
+}
+
+.pick-panel .inhouse-scroll {
+  flex: 1;
+}
+
+.inhouse-pick-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-content: start;
+}
+
+.pick-panel .inhouse-history-scroll {
+  max-height: 180px;
+}
+
+.teams-panel .inhouse-team-scroll {
+  flex: 1;
+  max-height: none;
 }
 
 .empty-state {
@@ -782,6 +956,41 @@ button:disabled {
   .spotlight-shell {
     grid-template-columns: 1fr;
   }
+
+  .directory-shell {
+    height: auto;
+  }
+
+  .player-library-card .table-list,
+  .event-management-card .checkbox-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .inhouse-pick-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .player-library-card,
+  .event-management-card,
+  .auction-management-card,
+  .side-panel,
+  .pick-panel,
+  .teams-panel,
+  .signup-panel {
+    height: auto;
+    max-height: none;
+  }
+
+  .player-library-card .table-list,
+  .directory-list,
+  .admin-card-body,
+  .left-panel .team-stack,
+  .signup-panel .inhouse-scroll,
+  .pick-panel .inhouse-scroll,
+  .teams-panel .inhouse-team-scroll,
+  .pick-panel .inhouse-history-scroll {
+    max-height: 420px;
+  }
 }
 
 @media (max-width: 720px) {
@@ -801,9 +1010,23 @@ button:disabled {
     border-radius: 22px;
   }
 
+  .admin-card {
+    height: auto;
+  }
+
+  .directory-shell {
+    height: auto;
+  }
+
   .hero-player-card {
     grid-template-columns: 1fr;
     text-align: center;
+  }
+
+  .player-library-card .table-list,
+  .event-management-card .checkbox-grid,
+  .directory-list {
+    grid-template-columns: 1fr;
   }
 }
 

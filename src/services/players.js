@@ -193,6 +193,60 @@ function deletePlayer(db, auth, playerId) {
   return { ok: true };
 }
 
+async function fetchPlayerAvatar(playerId, fetcher) {
+  const response = await fetcher(`https://api.opendota.com/api/players/${encodeURIComponent(playerId)}`);
+  if (!response.ok) {
+    throw new Error(`OpenDota avatar lookup failed: ${response.status}`);
+  }
+  const payload = await response.json();
+  return String(payload?.profile?.avatarfull || payload?.profile?.avatarmedium || payload?.profile?.avatar || "").trim();
+}
+
+async function syncPlayerAvatars(db, auth, input = {}) {
+  assertAdmin(auth);
+
+  const fetcher = input.fetcher || globalThis.fetch;
+  if (typeof fetcher !== "function") {
+    throw new Error("当前运行环境不支持头像同步。");
+  }
+
+  const refreshAll = input.refreshAll === true;
+  const candidates = db.players.filter((player) => /^\d+$/.test(player.id) && (refreshAll || !String(player.avatar || "").trim()));
+  let updated = 0;
+  let skipped = 0;
+  let failed = 0;
+  const updatedIds = [];
+
+  for (const player of candidates) {
+    try {
+      const avatar = await fetchPlayerAvatar(player.id, fetcher);
+      if (!avatar) {
+        skipped += 1;
+        continue;
+      }
+      if (player.avatar === avatar) {
+        skipped += 1;
+        continue;
+      }
+      player.avatar = avatar;
+      player.updatedAt = nowIso();
+      updated += 1;
+      updatedIds.push(player.id);
+    } catch {
+      failed += 1;
+    }
+  }
+
+  return {
+    scanned: candidates.length,
+    updated,
+    skipped,
+    failed,
+    refreshAll,
+    updatedIds
+  };
+}
+
 function importPlayersFromWorkbook(db, auth, input) {
   assertAdmin(auth);
 
@@ -251,6 +305,7 @@ function importPlayersFromWorkbook(db, auth, input) {
     if (existing) {
       const createdAt = existing.createdAt || importedAt;
       Object.assign(existing, payload, {
+        avatar: existing.avatar || payload.avatar,
         createdAt,
         updatedAt: importedAt
       });
@@ -281,9 +336,11 @@ function importPlayersFromWorkbook(db, auth, input) {
 module.exports = {
   createPlayer,
   deletePlayer,
+  fetchPlayerAvatar,
   getPlayer,
   importPlayersFromWorkbook,
   listPlayers,
   sanitizePlayer,
+  syncPlayerAvatars,
   updatePlayer
 };

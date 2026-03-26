@@ -4,7 +4,14 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 const XLSX = require("xlsx");
 const { createSeedData } = require("../src/seed");
-const { createPlayer, importPlayersFromWorkbook, listPlayers, updatePlayer } = require("../src/services/players");
+const {
+  createPlayer,
+  deletePlayer,
+  importPlayersFromWorkbook,
+  listPlayers,
+  syncPlayerAvatars,
+  updatePlayer
+} = require("../src/services/players");
 const { login, getAuth } = require("../src/services/auth");
 const { deleteEvent, signupForEvent, updateEvent } = require("../src/services/events");
 const { assignCaptains, makePick } = require("../src/services/inhouse");
@@ -46,6 +53,21 @@ test("编辑玩家时禁止修改数字 ID", () => {
   );
 });
 
+test("管理员可以删除未参与赛事流程的玩家", () => {
+  const db = freshDb();
+  const result = deletePlayer(db, { role: "admin" }, "1011");
+  assert.equal(result.ok, true);
+  assert.equal(db.players.some((player) => player.id === "1011"), false);
+});
+
+test("管理员不能删除已参与赛事流程的玩家", () => {
+  const db = freshDb();
+  assert.throws(
+    () => deletePlayer(db, { role: "admin" }, "1001"),
+    /暂不可删除/
+  );
+});
+
 test("管理员可以通过 Excel 导入玩家并更新同 steamid 数据", () => {
   const db = freshDb();
   const workbook = XLSX.utils.book_new();
@@ -75,6 +97,45 @@ test("管理员可以通过 Excel 导入玩家并更新同 steamid 数据", () =
   assert.equal(updated.mmr, 8100);
   assert.deepEqual(updated.positions, ["2", "4"]);
   assert.equal(updated.intro, "已更新");
+});
+
+test("重新导入 Excel 时保留已有头像", () => {
+  const db = freshDb();
+  const target = db.players.find((player) => player.id === "1001");
+  target.avatar = "https://cdn.example.com/avatar.png";
+  const workbook = XLSX.utils.book_new();
+  const sheet = XLSX.utils.aoa_to_sheet([
+    ["序号", "微信昵称", "steamid", "战力", "分数", "擅长位置", "内战冠军次数", "自我介绍"],
+    ["1", "兆焱S2", "1001", "82", "8100", "二,四", "1", "已更新"]
+  ]);
+  XLSX.utils.book_append_sheet(workbook, sheet, "S2名单");
+  const buffer = XLSX.write(workbook, { type: "buffer", bookType: "xlsx" });
+
+  importPlayersFromWorkbook(db, { role: "admin" }, {
+    sheetName: "S2名单",
+    contentBase64: buffer.toString("base64")
+  });
+
+  assert.equal(db.players.find((player) => player.id === "1001").avatar, "https://cdn.example.com/avatar.png");
+});
+
+test("管理员可以通过 OpenDota 同步玩家头像", async () => {
+  const db = freshDb();
+  const result = await syncPlayerAvatars(db, { role: "admin" }, {
+    fetcher: async (url) => ({
+      ok: true,
+      async json() {
+        return {
+          profile: {
+            avatarfull: `https://cdn.example.com/${url.split("/").pop()}.png`
+          }
+        };
+      }
+    })
+  });
+
+  assert.equal(result.updated > 0, true);
+  assert.equal(db.players.some((player) => String(player.avatar || "").startsWith("https://cdn.example.com/")), true);
 });
 
 test("非管理员不能通过 Excel 导入玩家", () => {

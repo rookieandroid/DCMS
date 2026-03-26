@@ -58,6 +58,7 @@ function getHeaders(extra = {}) {
 
 async function api(url, options = {}) {
   const response = await fetch(url, {
+    cache: "no-store",
     ...options,
     headers: {
       "Content-Type": "application/json",
@@ -139,6 +140,66 @@ function getCurrentEvent() {
 
 function getCurrentAuction() {
   return state.auctions.find((auction) => auction.id === state.selectedAuctionId) || null;
+}
+
+function captureUiSnapshot() {
+  const activeElement = document.activeElement;
+  const scrollingElement = document.scrollingElement || document.documentElement;
+  const snapshot = {
+    scrollTop: scrollingElement ? scrollingElement.scrollTop : window.scrollY,
+    activeId: "",
+    selectionStart: null,
+    selectionEnd: null
+  };
+
+  if (activeElement && app.contains(activeElement) && activeElement.id) {
+    snapshot.activeId = activeElement.id;
+    if (typeof activeElement.selectionStart === "number" && typeof activeElement.selectionEnd === "number") {
+      snapshot.selectionStart = activeElement.selectionStart;
+      snapshot.selectionEnd = activeElement.selectionEnd;
+    }
+  }
+
+  return snapshot;
+}
+
+function restoreUiSnapshot(snapshot) {
+  if (!snapshot) {
+    return;
+  }
+
+  const scrollingElement = document.scrollingElement || document.documentElement;
+  if (scrollingElement && Number.isFinite(snapshot.scrollTop)) {
+    scrollingElement.scrollTop = snapshot.scrollTop;
+  } else if (Number.isFinite(snapshot.scrollTop)) {
+    window.scrollTo(0, snapshot.scrollTop);
+  }
+
+  if (!snapshot.activeId) {
+    return;
+  }
+
+  const nextActive = document.getElementById(snapshot.activeId);
+  if (!nextActive) {
+    return;
+  }
+
+  nextActive.focus({ preventScroll: true });
+  if (
+    typeof snapshot.selectionStart === "number" &&
+    typeof snapshot.selectionEnd === "number" &&
+    typeof nextActive.setSelectionRange === "function"
+  ) {
+    nextActive.setSelectionRange(snapshot.selectionStart, snapshot.selectionEnd);
+  }
+}
+
+function isPlayerLocked(playerId) {
+  return state.events.some((event) => {
+    const signupIds = Array.isArray(event.signupIds) ? event.signupIds : [];
+    const captainIds = Array.isArray(event.captainIds) ? event.captainIds : [];
+    return signupIds.includes(playerId) || captainIds.includes(playerId);
+  });
 }
 
 function getCurrentInhouse() {
@@ -227,6 +288,14 @@ function renderMetricCards(metrics) {
   `;
 }
 
+function renderAvatar(player, className = "mini-avatar") {
+  const safeName = player?.displayName || "?";
+  if (player?.avatar) {
+    return `<div class="${className} image-avatar"><img src="${player.avatar}" alt="${safeName} 的头像" loading="lazy" referrerpolicy="no-referrer" /></div>`;
+  }
+  return `<div class="${className}">${safeName.slice(0, 1)}</div>`;
+}
+
 function renderPlayerDirectory(filters, players, options = {}) {
   const title = options.title || "玩家库";
   const subtitle = options.subtitle || "按战力、位置和关键词快速筛选";
@@ -269,7 +338,7 @@ function renderPlayerDirectory(filters, players, options = {}) {
                   (player) => `
                     <article class="directory-card">
                       <div class="directory-card-head">
-                        <div class="mini-avatar">${player.displayName.slice(0, 1)}</div>
+                        ${renderAvatar(player, "mini-avatar")}
                         <div>
                           <strong>${player.displayName}</strong>
                           <p>ID ${player.id} · 战力 ${player.power} · 分数 ${player.mmr}</p>
@@ -348,7 +417,7 @@ function connectStreams() {
 function playerCard(player, extra = "") {
   return `
     <article class="mini-player-card">
-      <div class="mini-avatar">${player.displayName.slice(0, 1)}</div>
+      ${renderAvatar(player, "mini-avatar")}
       <div class="mini-player-main">
         <strong>${player.displayName}</strong>
         <span>ID ${player.id} · 战力 ${player.power}</span>
@@ -520,11 +589,12 @@ function renderAdminWorkspace() {
       { label: "拍卖进行中", value: stats.runningAuctions, caption: "需要主持人关注倒计时的拍卖" }
     ])}
     <section class="workspace-grid">
-      <div class="glass admin-card">
+      <div class="glass admin-card player-library-card">
         <div class="card-head">
           <h2>玩家库管理</h2>
           <span>${filteredPlayers.length}/${state.players.length} 名玩家</span>
         </div>
+        <div class="admin-card-body">
         <div class="toolbar-grid">
           <label>关键词
             <input id="admin-player-keyword" type="text" value="${state.adminPlayerFilters.keyword}" placeholder="搜索昵称、数字 ID、微信名" />
@@ -556,6 +626,7 @@ function renderAdminWorkspace() {
             </label>
             <div class="import-actions">
               <button type="button" id="player-import-button" class="action-button">导入到公开库</button>
+              <button type="button" id="player-sync-avatar-button" class="secondary-button">同步 Steam 头像</button>
             </div>
           </div>
         </div>
@@ -578,26 +649,37 @@ function renderAdminWorkspace() {
             .map(
               (player) => `
                 <div class="table-row">
-                  <div>
-                    <strong>${player.displayName}</strong>
-                    <span>ID ${player.id} · 战力 ${player.power} · 位置 ${player.positions.join("/") || "-"}</span>
+                  <div class="table-row-main">
+                    ${renderAvatar(player, "mini-avatar")}
+                    <div class="table-row-copy">
+                      <strong>${player.displayName}</strong>
+                      <span>ID ${player.id} · 战力 ${player.power} · 位置 ${player.positions.join("/") || "-"}</span>
+                    </div>
                   </div>
                   <div class="row-actions">
                     <button type="button" data-edit-player="${player.id}" class="secondary-button small">编辑</button>
-                    <button type="button" data-delete-player="${player.id}" class="ghost-button small">删除</button>
+                    <button
+                      type="button"
+                      data-delete-player="${player.id}"
+                      class="ghost-button small ${isPlayerLocked(player.id) ? "disabled-button" : ""}"
+                      ${isPlayerLocked(player.id) ? "disabled" : ""}
+                      title="${isPlayerLocked(player.id) ? "该玩家已参与赛事流程，暂不可删除" : "删除该玩家"}"
+                    >${isPlayerLocked(player.id) ? "赛事占用中" : "删除"}</button>
                   </div>
                 </div>
               `
             )
             .join("")}
         </div>
+        </div>
       </div>
 
-      <div class="glass admin-card">
+      <div class="glass admin-card event-management-card">
         <div class="card-head">
           <h2>赛事与报名管理</h2>
           <span>${state.events.length} 场赛事</span>
         </div>
+        <div class="admin-card-body">
         <form id="event-form" class="grid-form compact">
           <label>赛事名称<input name="name" required /></label>
           <label>开始时间<input name="startTime" type="datetime-local" /></label>
@@ -643,8 +725,13 @@ function renderAdminWorkspace() {
                   return `
                     <label class="check-card">
                       <input type="checkbox" data-captain-checkbox value="${player.id}" ${checked ? "checked" : ""} />
-                      <span>${player.displayName}</span>
-                      <small>ID ${player.id} · 战力 ${player.power}</small>
+                      <div class="check-card-main">
+                        ${renderAvatar(player, "mini-avatar")}
+                        <div class="check-card-copy">
+                          <span>${player.displayName}</span>
+                          <small>ID ${player.id} · 战力 ${player.power}</small>
+                        </div>
+                      </div>
                     </label>
                   `;
                 })
@@ -664,13 +751,15 @@ function renderAdminWorkspace() {
           `
             : `<p class="muted-line">先创建一个赛事，再进行报名和队长任命。</p>`
         }
+        </div>
       </div>
 
-      <div class="glass admin-card">
+      <div class="glass admin-card auction-management-card">
         <div class="card-head">
           <h2>拍卖配置管理</h2>
           <span>${state.auctions.length} 个拍卖</span>
         </div>
+        <div class="admin-card-body">
         <form id="auction-form" class="grid-form compact">
           <label>关联赛事
             <select name="eventId">${state.events.map((item) => `<option value="${item.id}" ${item.id === state.selectedEventId ? "selected" : ""}>${item.name}</option>`).join("")}</select>
@@ -740,9 +829,10 @@ function renderAdminWorkspace() {
                     : `<span class="status-pill">${auction.status === "running" ? "竞价进行中" : "拍卖已结束"}</span>`
               }
             </div>
-          `
+            `
             : `<p class="muted-line">先创建拍卖，拍卖大厅才会进入可操作状态。</p>`
         }
+        </div>
       </div>
     </section>
   `;
@@ -831,7 +921,7 @@ function renderAuctionHall() {
             <h3>${currentPlayer ? currentPlayer.displayName : "等待开始拍卖"}</h3>
           </div>
           <div class="hero-player-card">
-            <div class="hero-avatar">${currentPlayer ? currentPlayer.displayName.slice(0, 1) : "?"}</div>
+            ${currentPlayer ? renderAvatar(currentPlayer, "hero-avatar") : '<div class="hero-avatar">?</div>'}
             <div class="hero-meta">
               <strong>${currentPlayer ? currentPlayer.displayName : "暂无拍品"}</strong>
               <div class="hero-tags">
@@ -885,7 +975,7 @@ function renderAuctionHall() {
             <h3>未拍卖选手列表</h3>
             <span>即将进入下一轮竞价</span>
           </div>
-          <div class="queue-list">
+          <div class="queue-list inhouse-scroll">
             ${auction.upcomingPlayers.map((player) => playerCard(player)).join("") || `<p class="muted-line">队列已经结束。</p>`}
           </div>
           <div class="section-title slim">
@@ -937,7 +1027,7 @@ function renderInhouseBoard() {
             <button id="signup-button" class="success-button" ${canSignup && !event.signedUp ? "" : "disabled"}>报名今日内战</button>
             <button id="cancel-signup-button" class="danger-button" ${canSignup && event.signedUp ? "" : "disabled"}>取消报名</button>
           </div>
-          <div class="queue-list">
+          <div class="queue-list inhouse-scroll">
             ${state.players
               .filter((player) => event.signupIds?.includes(player.id))
               .map((player) => playerCard(player))
@@ -947,21 +1037,26 @@ function renderInhouseBoard() {
         <div class="pick-panel">
           <h3>队长选人</h3>
           <p class="muted-line">${currentTeam ? `当前轮到 ${currentTeam.name} 选择队员。` : "等待初始化或本轮已结束。"}</p>
-          <div class="queue-list">
+          <div class="queue-list inhouse-pick-grid inhouse-scroll">
             ${availablePlayers
               .map(
                 (player) => `
                   <label class="pick-option ${state.selectedPickPlayerId === player.id ? "selected" : ""}">
                     <input type="radio" name="pickPlayer" value="${player.id}" ${state.selectedPickPlayerId === player.id ? "checked" : ""} />
-                    <span>${player.displayName}</span>
-                    <small>战力 ${player.power} · 位置 ${player.positions.join("/") || "-"}</small>
+                    <div class="pick-option-main">
+                      ${renderAvatar(player, "mini-avatar")}
+                      <div class="pick-option-copy">
+                        <span>${player.displayName}</span>
+                        <small>战力 ${player.power} · 位置 ${player.positions.join("/") || "-"}</small>
+                      </div>
+                    </div>
                   </label>
                 `
               )
               .join("") || `<p class="muted-line">当前没有可选玩家。</p>`}
           </div>
           <button id="pick-player-button" ${session && isCaptain && currentTeam?.captainId === state.auth.playerId && state.selectedPickPlayerId ? "" : "disabled"}>确认选择队员</button>
-          <div class="history-list compact-history">
+          <div class="history-list compact-history inhouse-history-scroll">
             ${(session?.pickHistory || [])
               .slice()
               .reverse()
@@ -974,7 +1069,7 @@ function renderInhouseBoard() {
           ${
             session
               ? `
-              <div class="team-stack compact-stack">
+              <div class="team-stack compact-stack inhouse-team-scroll">
                 ${session.teams
                   .map(
                     (team) => `
@@ -1002,6 +1097,7 @@ function renderInhouseBoard() {
 }
 
 function render() {
+  const uiSnapshot = captureUiSnapshot();
   clearInterval(state.countdownTimer);
   const pageContent =
     state.currentPage === "auction"
@@ -1019,6 +1115,7 @@ function render() {
   `;
 
   bindEvents();
+  restoreUiSnapshot(uiSnapshot);
 
   state.countdownTimer = setInterval(() => {
     const node = document.querySelector("[data-auction-countdown]");
@@ -1265,6 +1362,31 @@ function bindEvents() {
     });
   }
 
+  const playerSyncAvatarButton = document.querySelector("#player-sync-avatar-button");
+  if (playerSyncAvatarButton) {
+    playerSyncAvatarButton.addEventListener("click", async () => {
+      playerSyncAvatarButton.disabled = true;
+      playerSyncAvatarButton.textContent = "同步中...";
+      try {
+        const payload = await api("/api/players/sync-avatars", {
+          method: "POST",
+          body: JSON.stringify({})
+        });
+        setNotice(
+          `头像同步完成：检查 ${payload.scanned} 人，更新 ${payload.updated} 人，跳过 ${payload.skipped} 人，失败 ${payload.failed} 人。`,
+          "success"
+        );
+        await refreshBootstrap();
+      } catch (error) {
+        setNotice(error.message, "error");
+        render();
+      } finally {
+        playerSyncAvatarButton.disabled = false;
+        playerSyncAvatarButton.textContent = "同步 Steam 头像";
+      }
+    });
+  }
+
   document.querySelectorAll("[data-edit-player]").forEach((button) => {
     button.addEventListener("click", () => {
       state.editingPlayerId = button.getAttribute("data-edit-player");
@@ -1274,10 +1396,20 @@ function bindEvents() {
 
   document.querySelectorAll("[data-delete-player]").forEach((button) => {
     button.addEventListener("click", async () => {
+      const playerId = button.getAttribute("data-delete-player");
+      const player = state.players.find((item) => item.id === playerId);
+      if (!playerId || !player) {
+        return;
+      }
+      if (!window.confirm(`确认删除玩家「${player.displayName}」吗？此操作不可撤销。`)) {
+        return;
+      }
       try {
-        await api(`/api/players/${button.getAttribute("data-delete-player")}`, {
+        await api(`/api/players/${playerId}`, {
           method: "DELETE"
         });
+        state.players = state.players.filter((item) => item.id !== playerId);
+        state.editingPlayerId = state.editingPlayerId === playerId ? "" : state.editingPlayerId;
         setNotice("玩家已删除。", "success");
         await refreshBootstrap();
       } catch (error) {

@@ -38,26 +38,121 @@
       "role": "player",
       "playerId": "1006",
       "createdAt": "2026-03-19T09:52:18.706Z"
+    },
+    {
+      "token": "wwSkEktJVLhSorkHfqyggcDsKDiHvqgd",
+      "role": "admin",
+      "createdAt": "2026-03-26T10:00:20.154Z"
+    },
+    {
+      "token": "ked3mShBNRHFfHpAjk54UUPYBvWQhee7",
+      "role": "admin",
+      "createdAt": "2026-03-26T10:01:10.449Z"
+    },
+    {
+      "token": "TS8LqGzarj9sG6rhEeWymuJf24fLw4W3",
+      "role": "admin",
+      "createdAt": "2026-03-26T10:01:13.902Z"
+    },
+    {
+      "token": "CHzJTKziJ3BzKshNbQaWzwGRWjwZj2Py",
+      "role": "admin",
+      "createdAt": "2026-03-26T10:08:01.471Z"
+    },
+    {
+      "token": "AJh2MsszHxWa4GSzRy3DrDm7dAp4Ca3W",
+      "role": "player",
+      "playerId": "1013",
+      "createdAt": "2026-03-26T10:08:36.658Z"
+    },
+    {
+      "token": "kbdkDDr5VoVoFdiNfYyGBdKqeXdiAqdd",
+      "role": "admin",
+      "createdAt": "2026-03-26T10:08:54.572Z"
+    },
+    {
+      "token": "vqJLGJfLDfFqmZ5kkjUskuhaNno4kPHJ",
+      "role": "player",
+      "playerId": "1001",
+      "createdAt": "2026-03-26T10:09:33.853Z"
+    },
+    {
+      "token": "UXnWCTP9UqbBm2Me5AaGTuksnsuygNzh",
+      "role": "player",
+      "playerId": "1002",
+      "createdAt": "2026-03-26T10:09:38.633Z"
+    },
+    {
+      "token": "4pDmSg42rkKxz7LqtPf9YELkzTAPn36L",
+      "role": "player",
+      "playerId": "1003",
+      "createdAt": "2026-03-26T10:09:43.473Z"
+    },
+    {
+      "token": "5FuoPxXPkSZgn9QsFK9JZhx2u9a7fgfy",
+      "role": "player",
+      "playerId": "1004",
+      "createdAt": "2026-03-26T10:09:49.203Z"
+    },
+    {
+      "token": "4ektkQXTD8Ji6qUBjwdoTqMEF9bBrSEZ",
+      "role": "player",
+      "playerId": "1005",
+      "createdAt": "2026-03-26T10:09:55.031Z"
+    },
+    {
+      "token": "3ZMwadvi52ipfSdWLcGDpJ7UyZdsNJpy",
+      "role": "player",
+      "playerId": "1006",
+      "createdAt": "2026-03-26T10:10:00.448Z"
+    },
+    {
+      "token": "gnkmC2dg7czWaBnwsMPJvtFi2CU877fF",
+      "role": "player",
+      "playerId": "1007",
+      "createdAt": "2026-03-26T10:10:05.949Z"
+    },
+    {
+      "token": "FQkoU7Czi8qc7cQ7gzRo3wvzaJZJNUWV",
+      "role": "player",
+      "playerId": "1008",
+      "createdAt": "2026-03-26T10:10:10.732Z"
+    },
+    {
+      "token": "UifcreyTmq94WT5d29q4QYutN8SLGFUo",
+      "role": "player",
+      "playerId": "1009",
+      "createdAt": "2026-03-26T10:10:16.399Z"
+    },
+    {
+      "token": "iN278c7BzDW49W969uPJ86aZw7uMSYYG",
+      "role": "admin",
+      "createdAt": "2026-03-26T10:10:27.477Z"
+    },
+    {
+      "token": "QREvVYcDhuwb4qhkPFDPzhtZCg4gMycx",
+      "role": "admin",
+      "createdAt": "2026-03-26T10:32:58.356Z"
+    },
+    {
+      "token": "5getvv3TUXBygDYjXWVb5gaDPt5QAgjE",
+      "role": "player",
+      "playerId": "164613165",
+      "createdAt": "2026-03-26T11:05:28.882Z"
+    },
+    {
+      "token": "UvijUnR2bVgX2KMt7oTGqGCsdKxBtdkC",
+      "role": "admin",
+      "createdAt": "2026-03-26T11:05:47.253Z"
+    },
+    {
+      "token": "xzELfEgRHKcv8UquCeVuYYMTyjwRbt7D",
+      "role": "player",
+      "playerId": "1002",
+      "createdAt": "2026-03-26T11:11:03.832Z"
     }
   ],
   "players": [
-    {
-      "id": "1001",
-      "displayName": "兆焱",
-      "wechatName": "兆焱",
-      "mmr": 510,
-      "power": 95,
-      "positions": [
-        "2",
-        "5"
-      ],
-      "intro": "喜欢带节奏的中单队长，擅长大核与法核切换。",
-      "championships": 2,
-      "avatar": "",
-      "isPublic": true,
-      "createdAt": "2026-03-19T08:36:47.340Z",
-      "updatedAt": "2026-03-19T08:36:47.340Z"
-    },
     {
       "id": "1002",
       "displayName": "小小Zuilekha",
@@ -70,88 +165,6 @@
       ],
       "intro": "手脚干净不偷大哥的钱，偏团队型辅助。",
       "championships": 1,
-      "avatar": "",
-      "isPublic": true,
-      "createdAt": "2026-03-19T08:36:47.340Z",
-      "updatedAt": "2026-03-19T08:36:47.340Z"
-    },
-    {
-      "id": "1003",
-      "displayName": "米波三号",
-      "wechatName": "",
-      "mmr": 470,
-      "power": 88,
-      "positions": [
-        "1",
-        "2"
-      ],
-      "intro": "高爆发收割位，擅长在残局里接管比赛。",
-      "championships": 0,
-      "avatar": "",
-      "isPublic": true,
-      "createdAt": "2026-03-19T08:36:47.340Z",
-      "updatedAt": "2026-03-19T08:36:47.340Z"
-    },
-    {
-      "id": "1004",
-      "displayName": "山丘胖头鱼",
-      "wechatName": "",
-      "mmr": 452,
-      "power": 84,
-      "positions": [
-        "3",
-        "4"
-      ],
-      "intro": "对线强度稳定，喜欢主动开团。",
-      "championships": 0,
-      "avatar": "",
-      "isPublic": true,
-      "createdAt": "2026-03-19T08:36:47.340Z",
-      "updatedAt": "2026-03-19T08:36:47.340Z"
-    },
-    {
-      "id": "1005",
-      "displayName": "奶绿四号位",
-      "wechatName": "",
-      "mmr": 440,
-      "power": 80,
-      "positions": [
-        "4"
-      ],
-      "intro": "游走型四号位，开雾抓人效率高。",
-      "championships": 0,
-      "avatar": "",
-      "isPublic": true,
-      "createdAt": "2026-03-19T08:36:47.340Z",
-      "updatedAt": "2026-03-19T08:36:47.340Z"
-    },
-    {
-      "id": "1006",
-      "displayName": "云顶守卫",
-      "wechatName": "",
-      "mmr": 436,
-      "power": 78,
-      "positions": [
-        "5"
-      ],
-      "intro": "纪律性很强的保人辅助。",
-      "championships": 0,
-      "avatar": "",
-      "isPublic": true,
-      "createdAt": "2026-03-19T08:36:47.340Z",
-      "updatedAt": "2026-03-19T08:36:47.340Z"
-    },
-    {
-      "id": "1007",
-      "displayName": "白牛晚点到",
-      "wechatName": "",
-      "mmr": 430,
-      "power": 75,
-      "positions": [
-        "3"
-      ],
-      "intro": "先手果断，适合体系型阵容。",
-      "championships": 0,
       "avatar": "",
       "isPublic": true,
       "createdAt": "2026-03-19T08:36:47.340Z",
@@ -208,23 +221,6 @@
       "updatedAt": "2026-03-19T08:36:47.340Z"
     },
     {
-      "id": "1011",
-      "displayName": "哈斯卡发烧友",
-      "wechatName": "",
-      "mmr": 412,
-      "power": 66,
-      "positions": [
-        "1",
-        "3"
-      ],
-      "intro": "英雄池偏绝活，冲脸压制能力强。",
-      "championships": 0,
-      "avatar": "",
-      "isPublic": true,
-      "createdAt": "2026-03-19T08:36:47.340Z",
-      "updatedAt": "2026-03-19T08:36:47.340Z"
-    },
-    {
       "id": "1012",
       "displayName": "快乐冰女",
       "wechatName": "",
@@ -252,42 +248,10 @@
       ],
       "intro": "",
       "championships": 0,
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/d84765f299f77d76cdb08bd4fd816a7872dcf3f7_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-19T08:50:01.994Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
-    },
-    {
-      "id": "1013",
-      "displayName": "曾焦阳ORI",
-      "wechatName": "zzzz曾",
-      "mmr": 8800,
-      "power": 88,
-      "positions": [
-        "2"
-      ],
-      "intro": "无敌曾焦阳",
-      "championships": 0,
-      "avatar": "",
-      "isPublic": true,
-      "createdAt": "2026-03-19T10:01:56.552Z",
-      "updatedAt": "2026-03-19T10:01:56.552Z"
-    },
-    {
-      "id": "176191301",
-      "displayName": "兆焱",
-      "wechatName": "兆焱",
-      "mmr": 8900,
-      "power": 90,
-      "positions": [
-        "2"
-      ],
-      "championships": 2,
-      "intro": "上帝",
-      "avatar": "",
-      "isPublic": true,
-      "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:48.290Z"
     },
     {
       "id": "1004877057",
@@ -303,10 +267,10 @@
       ],
       "championships": 2,
       "intro": "脚踢小雪，拳打鱼畜",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/66074efacc142571610031a965072b67174589a5_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:48.550Z"
     },
     {
       "id": "187933845",
@@ -320,10 +284,10 @@
       ],
       "championships": 1,
       "intro": "武痴",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/8b84adbdb97b0f57819150d36cc300715d8ba5c5_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:48.842Z"
     },
     {
       "id": "187468758",
@@ -339,10 +303,10 @@
       ],
       "championships": 1,
       "intro": "精品洋葱头（专治扛起进攻大旗的三号位，超级贱狗）",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/30c797d336d45e98c2de59c6d85489b13668f49e_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:49.085Z"
     },
     {
       "id": "136801289",
@@ -355,10 +319,10 @@
       ],
       "championships": 1,
       "intro": "cc是我师傅（热辣舞男）",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/ab3bc374b7fc790cbc79f5d0ccbb989067e0889d_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:49.318Z"
     },
     {
       "id": "341670770",
@@ -371,10 +335,10 @@
       ],
       "championships": 1,
       "intro": "保雨派",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/5e8b71b764e9c36f24fa30f0a5fbc2529781f2ae_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:49.901Z"
     },
     {
       "id": "381057664",
@@ -388,10 +352,10 @@
       ],
       "championships": 1,
       "intro": "温文尔雅",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/917566a4b162eb898563e321b33716c116620432_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:50.135Z"
     },
     {
       "id": "106964785",
@@ -404,10 +368,10 @@
       ],
       "championships": 4,
       "intro": "一三摇摆，二也能摇",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/3ade21a1ece4a694ec6593cbefa8a72baa3b5d1e_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:50.371Z"
     },
     {
       "id": "299227181",
@@ -421,10 +385,10 @@
       ],
       "championships": 1,
       "intro": "",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/f18bdee173a298ea843020d863afe99b35412b10_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:50.644Z"
     },
     {
       "id": "266088396",
@@ -439,10 +403,10 @@
       ],
       "championships": 1,
       "intro": "长的算了也就算了，打的也这么算了。",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/2ce1f139b627b9c809ecabcf750be73a45e3e388_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:50.882Z"
     },
     {
       "id": "137306952",
@@ -455,10 +419,10 @@
       ],
       "championships": 0,
       "intro": "哭胜（男同）",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/0ea7106b6bcb9a6039023b3072a7239afd6ceb59_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:51.172Z"
     },
     {
       "id": "138558413",
@@ -471,10 +435,10 @@
       ],
       "championships": 2,
       "intro": "只想干笑败",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/c3b189ab15a0ea3d9774444f7f3dbf5f3eb13a49_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:51.411Z"
     },
     {
       "id": "173964673",
@@ -488,10 +452,10 @@
       ],
       "championships": 0,
       "intro": "一年半以前8100，后面没打过大号天梯了",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/27c9a190b3ac4028071f33112b9593ab7d96a975_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:51.696Z"
     },
     {
       "id": "383560624",
@@ -506,10 +470,10 @@
       ],
       "championships": 2,
       "intro": "笑败粉丝",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/a7cfc125087e34eed55cf37fedd3ba7fc3f4c8a1_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:51.926Z"
     },
     {
       "id": "885588023",
@@ -526,10 +490,10 @@
       ],
       "championships": 0,
       "intro": "？",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/9cf7116c66252c22085e229cb56a564a60f83041_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:52.269Z"
     },
     {
       "id": "267719332",
@@ -544,10 +508,10 @@
       ],
       "championships": 1,
       "intro": "三猫一滚puck 拉席克女王小小，ling神毒唯",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/51eb0d97fd7e38126c8712883849634e5838326a_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:52.504Z"
     },
     {
       "id": "457383175",
@@ -560,10 +524,10 @@
       ],
       "championships": 0,
       "intro": "笑败大神铁粉丝（忧郁王子）",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/ebfcc101562f0fa910adc714b320c02f2fd4d3e6_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:52.743Z"
     },
     {
       "id": "277443592",
@@ -576,10 +540,10 @@
       ],
       "championships": 1,
       "intro": "脚踢风仔的一号位（可爱水豚）",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/f82b7cb70109ae96ab7896ef444a196637ec1dcc_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:52.976Z"
     },
     {
       "id": "186753076",
@@ -594,10 +558,10 @@
       ],
       "championships": 0,
       "intro": "啥都会一点",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/f8de47f063890c4fd6b94f636d481359d870c48b_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:53.270Z"
     },
     {
       "id": "1259908216",
@@ -610,10 +574,10 @@
       ],
       "championships": 3,
       "intro": "Dota思想家",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/d5625611b347503dc8302a6a6aa2bfbbd56020b3_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:53.501Z"
     },
     {
       "id": "401464166",
@@ -630,10 +594,10 @@
       ],
       "championships": 0,
       "intro": "儒雅随和",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/dc29646e5338b3b18efe9ff3521356832b818485_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:53.794Z"
     },
     {
       "id": "355328125",
@@ -650,10 +614,10 @@
       ],
       "championships": 2,
       "intro": "每个位置都可以打，眼位研究不多，需要练英雄扩池子",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/ec5dbc2c185474b8b2300bb0f236c0f5f2c2973c_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:54.025Z"
     },
     {
       "id": "122810642",
@@ -670,10 +634,10 @@
       ],
       "championships": 0,
       "intro": "超级大稿子",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/953414427b7411f0866586ffa540364d379e764a_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:54.315Z"
     },
     {
       "id": "235611786",
@@ -686,10 +650,10 @@
       ],
       "championships": 1,
       "intro": "混子中",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/cc65b2e51c12c364fdb62d61b2232e804b4c789a_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:54.554Z"
     },
     {
       "id": "108868178",
@@ -702,10 +666,10 @@
       ],
       "championships": 0,
       "intro": "性价比中单。打谁都不怂 还什么都会",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/742293032d786b5da3e254e56f92b50b19e24cb9_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:54.946Z"
     },
     {
       "id": "104465635",
@@ -719,10 +683,10 @@
       ],
       "championships": 2,
       "intro": "老毕登",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/46962c059e2387206c0323b0f0359186b20623b3_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:55.187Z"
     },
     {
       "id": "334481697",
@@ -737,10 +701,10 @@
       ],
       "championships": 0,
       "intro": "",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/16c99f314526c131c0bce34e17b0b9ecb687ff7b_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:55.414Z"
     },
     {
       "id": "255882400",
@@ -755,10 +719,10 @@
       ],
       "championships": 0,
       "intro": "听话",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/9cf5b46088007f2cd00642330c6230b6858a95fa_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:55.647Z"
     },
     {
       "id": "117970934",
@@ -771,10 +735,10 @@
       ],
       "championships": 0,
       "intro": "太久没玩，需要复建，现在有点菜",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/a5cd2ea6beb801d3c86910e51430038cc10b37d2_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:55.889Z"
     },
     {
       "id": "154029585",
@@ -787,10 +751,10 @@
       ],
       "championships": 3,
       "intro": "三号位是扛起进攻大旗的猛男，不是你们口中的贱狗（帅哥）（雨一三）",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/5e48796b6c5d2479fc219119aa839b9a870cad8c_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:56.121Z"
     },
     {
       "id": "1255409177",
@@ -803,10 +767,10 @@
       ],
       "championships": 2,
       "intro": "没办法兄弟，我穷点没事，三号位是这样的，尽力了我的吧",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/39cbf2ec8b22b1259a062d1d8d9cc157b06c57d0_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:56.415Z"
     },
     {
       "id": "354618808",
@@ -820,10 +784,10 @@
       ],
       "championships": 1,
       "intro": "我是笑败的忠臣",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/f0d01d4c53844deb4fde98263687fcdc80f859ba_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:56.647Z"
     },
     {
       "id": "283200408",
@@ -837,10 +801,10 @@
       ],
       "championships": 0,
       "intro": "保抢我无敌",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/0f96875f625cd671e0c47e6c41613f3aaf38665b_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:56.939Z"
     },
     {
       "id": "223646770",
@@ -854,10 +818,10 @@
       ],
       "championships": 0,
       "intro": "臭酱油一枚",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/eaf55603124b7c43a169dc9255c81bff60d4449e_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:57.170Z"
     },
     {
       "id": "117252110",
@@ -870,10 +834,10 @@
       ],
       "championships": 0,
       "intro": "",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/50cedd1db91f810b49214f0bc2db9345f7d34aa1_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:57.463Z"
     },
     {
       "id": "417868870",
@@ -888,10 +852,10 @@
       ],
       "championships": 0,
       "intro": "",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/77fc89d13628623183d5437b958da41bc5f05e04_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:57.698Z"
     },
     {
       "id": "242739321",
@@ -907,10 +871,10 @@
       ],
       "championships": 0,
       "intro": "",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/7f8568b2c1df0811ba520a5d985cf390ed8c72bd_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:57.993Z"
     },
     {
       "id": "140389337",
@@ -925,10 +889,10 @@
       ],
       "championships": 0,
       "intro": "",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/8df3fbb9717a9433d4c709138700c25228676cb9_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:58.228Z"
     },
     {
       "id": "189497913",
@@ -945,10 +909,10 @@
       ],
       "championships": 0,
       "intro": "新人求不虐",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/8bc3e81eb09cb7272a0c010028636b83995d809f_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:58.514Z"
     },
     {
       "id": "208333479",
@@ -963,10 +927,10 @@
       ],
       "championships": 1,
       "intro": "佛系青年",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/45e60d1214e3bcb5b2c23901c2b5d1d851b45800_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:58.750Z"
     },
     {
       "id": "140594695",
@@ -981,10 +945,10 @@
       ],
       "championships": 2,
       "intro": "✌️😛✌️",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/5ebd0532493c05eda426562f9786d9e7085a9ddc_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:59.091Z"
     },
     {
       "id": "178988576",
@@ -998,10 +962,10 @@
       ],
       "championships": 0,
       "intro": "复建选手",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/f8e657977cfd1f3293577a4eac2b6b2c172ee229_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:59.330Z"
     },
     {
       "id": "136537289",
@@ -1017,10 +981,10 @@
       ],
       "championships": 0,
       "intro": "赌",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/c94633f1303787c7164b7833b0d964e87dc1217d_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:59.578Z"
     },
     {
       "id": "320479234",
@@ -1034,10 +998,10 @@
       ],
       "championships": 2,
       "intro": "对你的爱就像屎拉裤兜里 沉甸甸的 只有我自己知道",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/dbeeaab5ac697941afd75632eb7aa2e0a4bb3ce6_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:50:59.811Z"
     },
     {
       "id": "141166215",
@@ -1051,10 +1015,10 @@
       ],
       "championships": 0,
       "intro": "QWQ",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/5089dabc2919b5fee9e43781f835e4730ea2e381_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:51:00.087Z"
     },
     {
       "id": "370449300",
@@ -1068,10 +1032,10 @@
       ],
       "championships": 0,
       "intro": "很会抗压，不只玩憋壳形3。",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/518f02affe1594634c7864680f1459125aa11e58_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:51:00.332Z"
     },
     {
       "id": "138720710",
@@ -1084,10 +1048,10 @@
       ],
       "championships": 2,
       "intro": "不准欺负狗屎心念！换我来！",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/133d7a740d8cbb3da4ff6fb4afd5083a7ed5fff9_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:51:00.608Z"
     },
     {
       "id": "101126670",
@@ -1101,10 +1065,10 @@
       ],
       "championships": 0,
       "intro": "绝活海",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/222de919ace21d3d7212b22616f3e18c805456cd_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:51:00.841Z"
     },
     {
       "id": "148343069",
@@ -1119,10 +1083,10 @@
       ],
       "championships": 0,
       "intro": "叫我哥哥或者叔叔",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/2abb7a0b0caa2d1a0ca88817b1fe91fd966b2bdc_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:51:01.133Z"
     },
     {
       "id": "351772086",
@@ -1137,10 +1101,10 @@
       ],
       "championships": 1,
       "intro": "捞陈、酒仙、小娜迦、维萨吉。",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:51:01.366Z"
     },
     {
       "id": "168661508",
@@ -1154,10 +1118,10 @@
       ],
       "championships": 0,
       "intro": "叫我姐姐或者阿姨",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/4136f25f6ce129f559702e6fdd30784eb572e155_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:51:01.656Z"
     },
     {
       "id": "400294058",
@@ -1171,10 +1135,10 @@
       ],
       "championships": 0,
       "intro": "",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/2e546c460f7c136621f3327528759837d2d764e3_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:51:01.885Z"
     },
     {
       "id": "124599786",
@@ -1188,10 +1152,10 @@
       ],
       "championships": 0,
       "intro": "暖男",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/6cc9e3336b8668007709278409a4a7010b1bf548_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:51:02.183Z"
     },
     {
       "id": "137784091",
@@ -1205,10 +1169,10 @@
       ],
       "championships": 0,
       "intro": "什么花里胡哨的",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/a9c06ebb525614444753a6f95f73c193d79634aa_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:51:02.413Z"
     },
     {
       "id": "245304772",
@@ -1222,10 +1186,10 @@
       ],
       "championships": 0,
       "intro": "英雄勺哟！！！！！",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/4fd7b255d121485d63ab27b7803d4ee3cd940dd9_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:51:02.706Z"
     },
     {
       "id": "136636318",
@@ -1238,10 +1202,10 @@
       ],
       "championships": 0,
       "intro": "四五号，学学4号，但半途而废了（我也不想呀），现在只想继续学学学，跟大家一起进步进步进步",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/95c998aa1f60115cf2621cac779339a8106aff12_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:51:02.936Z"
     },
     {
       "id": "144220785",
@@ -1254,10 +1218,10 @@
       ],
       "championships": 0,
       "intro": "",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/887461c2809c22bb1aef2ec01555ebb423bfdde1_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:51:03.227Z"
     },
     {
       "id": "283980539",
@@ -1291,10 +1255,10 @@
       ],
       "championships": 0,
       "intro": "心态好",
-      "avatar": "",
+      "avatar": "https://avatars.steamstatic.com/9b7f1439078cce75f8be301b747063b77b27c784_full.jpg",
       "isPublic": true,
       "createdAt": "2026-03-26T09:26:50.000003Z",
-      "updatedAt": "2026-03-26T09:26:50.000003Z"
+      "updatedAt": "2026-03-26T10:51:04.282Z"
     }
   ],
   "events": [
@@ -1309,25 +1273,83 @@
       "captainCount": 2,
       "signupOpen": true,
       "signupIds": [
-        "1001",
         "1002",
-        "1003",
-        "1004",
-        "1007",
-        "1008",
-        "1009",
         "1010",
         "164613165",
-        "1005",
-        "1006",
-        "1013"
+        "1004877057",
+        "187933845",
+        "136801289",
+        "187468758",
+        "341670770",
+        "381057664",
+        "106964785",
+        "266088396",
+        "299227181",
+        "137306952",
+        "138558413",
+        "173964673",
+        "383560624",
+        "885588023",
+        "267719332",
+        "457383175",
+        "1259908216",
+        "186753076",
+        "277443592",
+        "1008",
+        "1009",
+        "401464166",
+        "122810642",
+        "355328125",
+        "235611786",
+        "1012",
+        "108868178",
+        "104465635",
+        "117970934",
+        "154029585",
+        "255882400",
+        "334481697",
+        "1255409177",
+        "354618808",
+        "283200408",
+        "117252110",
+        "223646770",
+        "242739321",
+        "417868870",
+        "140389337",
+        "189497913",
+        "208333479",
+        "136537289",
+        "140594695",
+        "178988576",
+        "141166215",
+        "320479234",
+        "138720710",
+        "370449300",
+        "101126670",
+        "148343069",
+        "351772086",
+        "168661508",
+        "400294058",
+        "124599786",
+        "137784091",
+        "136636318",
+        "144220785",
+        "245304772",
+        "283980539",
+        "449128986"
       ],
       "captainIds": [
-        "1001",
-        "164613165"
+        "1004877057",
+        "187933845",
+        "341670770",
+        "885588023",
+        "267719332",
+        "108868178",
+        "154029585",
+        "283980539"
       ],
       "createdAt": "2026-03-19T08:36:47.340Z",
-      "updatedAt": "2026-03-19T10:02:11.004Z"
+      "updatedAt": "2026-03-26T10:14:14.557Z"
     }
   ],
   "inhouseSessions": [
@@ -1337,59 +1359,364 @@
       "status": "drafting",
       "teamSize": 5,
       "captainIds": [
-        "1001",
-        "164613165"
+        "1004877057",
+        "187933845",
+        "341670770",
+        "885588023",
+        "267719332",
+        "108868178",
+        "154029585",
+        "283980539"
       ],
       "teams": [
         {
-          "id": "1001",
-          "captainId": "1001",
-          "name": "兆焱队",
+          "id": "1004877057",
+          "captainId": "1004877057",
+          "name": "秋队",
           "memberIds": [
-            "1001"
+            "1004877057"
           ],
-          "totalPower": 95
+          "totalPower": 90
         },
         {
-          "id": "164613165",
-          "captainId": "164613165",
-          "name": "踏雾队",
+          "id": "187933845",
+          "captainId": "187933845",
+          "name": "赤夜紫雨队",
           "memberIds": [
-            "164613165",
-            "1004"
+            "187933845"
           ],
-          "totalPower": 164
+          "totalPower": 89
+        },
+        {
+          "id": "341670770",
+          "captainId": "341670770",
+          "name": "大蟑螂队",
+          "memberIds": [
+            "341670770"
+          ],
+          "totalPower": 87
+        },
+        {
+          "id": "885588023",
+          "captainId": "885588023",
+          "name": "YuuU队",
+          "memberIds": [
+            "885588023"
+          ],
+          "totalPower": 77
+        },
+        {
+          "id": "267719332",
+          "captainId": "267719332",
+          "name": "云天河队",
+          "memberIds": [
+            "267719332"
+          ],
+          "totalPower": 76
+        },
+        {
+          "id": "108868178",
+          "captainId": "108868178",
+          "name": "coconut队",
+          "memberIds": [
+            "108868178"
+          ],
+          "totalPower": 64
+        },
+        {
+          "id": "154029585",
+          "captainId": "154029585",
+          "name": "蜡笔小雪队",
+          "memberIds": [
+            "154029585"
+          ],
+          "totalPower": 60
+        },
+        {
+          "id": "283980539",
+          "captainId": "283980539",
+          "name": "绮怀.队",
+          "memberIds": [
+            "283980539"
+          ],
+          "totalPower": 28
         }
       ],
       "availablePlayerIds": [
         "1002",
-        "1003",
-        "1005",
-        "1006",
-        "1007",
+        "1010",
+        "164613165",
+        "136801289",
+        "187468758",
+        "381057664",
+        "106964785",
+        "266088396",
+        "299227181",
+        "137306952",
+        "138558413",
+        "173964673",
+        "383560624",
+        "457383175",
+        "1259908216",
+        "186753076",
+        "277443592",
         "1008",
         "1009",
-        "1010"
+        "401464166",
+        "122810642",
+        "355328125",
+        "235611786",
+        "1012",
+        "104465635",
+        "117970934",
+        "255882400",
+        "334481697",
+        "1255409177",
+        "354618808",
+        "283200408",
+        "117252110",
+        "223646770",
+        "242739321",
+        "417868870",
+        "140389337",
+        "189497913",
+        "208333479",
+        "136537289",
+        "140594695",
+        "178988576",
+        "141166215",
+        "320479234",
+        "138720710",
+        "370449300",
+        "101126670",
+        "148343069",
+        "351772086",
+        "168661508",
+        "400294058",
+        "124599786",
+        "137784091",
+        "136636318",
+        "144220785",
+        "245304772",
+        "449128986"
       ],
-      "pickHistory": [
-        {
-          "round": 1,
-          "teamId": "164613165",
-          "captainId": "164613165",
-          "playerId": "1004",
-          "pickedAt": "2026-03-19T09:00:50.384Z"
-        }
-      ],
+      "pickHistory": [],
       "currentRound": 1,
       "roundQueue": [
-        "1001"
+        "283980539",
+        "154029585",
+        "108868178",
+        "267719332",
+        "885588023",
+        "341670770",
+        "187933845",
+        "1004877057"
       ],
-      "currentTurnTeamId": "1001",
+      "currentTurnTeamId": "283980539",
       "createdAt": "2026-03-19T08:36:47.340Z",
-      "updatedAt": "2026-03-19T09:00:50.384Z"
+      "updatedAt": "2026-03-26T10:14:14.557Z"
     }
   ],
   "auctionRooms": [
+    {
+      "id": "auction_1774520103730_x0ltqe",
+      "eventId": "event_1773909407340_vr7pow",
+      "title": "微雨杯 S1 社区赛 选手拍卖",
+      "status": "paused",
+      "nominationOrder": [
+        "1002",
+        "1010",
+        "164613165",
+        "136801289",
+        "187468758",
+        "381057664",
+        "106964785",
+        "266088396",
+        "299227181",
+        "137306952",
+        "138558413",
+        "173964673",
+        "383560624",
+        "457383175",
+        "1259908216",
+        "186753076",
+        "277443592",
+        "1008",
+        "1009",
+        "401464166",
+        "122810642",
+        "355328125",
+        "235611786",
+        "1012",
+        "104465635",
+        "117970934",
+        "255882400",
+        "334481697",
+        "1255409177",
+        "354618808",
+        "283200408",
+        "117252110",
+        "223646770",
+        "242739321",
+        "417868870",
+        "140389337",
+        "189497913",
+        "208333479",
+        "136537289",
+        "140594695",
+        "178988576",
+        "141166215",
+        "320479234",
+        "138720710",
+        "370449300",
+        "101126670",
+        "148343069",
+        "351772086",
+        "168661508",
+        "400294058",
+        "124599786",
+        "137784091",
+        "136636318",
+        "144220785",
+        "245304772",
+        "449128986"
+      ],
+      "currentNominationIndex": 3,
+      "config": {
+        "startPrice": 20,
+        "increment": 5,
+        "bidTimeoutSec": 100
+      },
+      "teams": [
+        {
+          "id": "1004877057",
+          "captainId": "1004877057",
+          "name": "秋队",
+          "budget": 600,
+          "spent": 0,
+          "playerIds": [
+            "1004877057"
+          ],
+          "totalPower": 90
+        },
+        {
+          "id": "187933845",
+          "captainId": "187933845",
+          "name": "赤夜紫雨队",
+          "budget": 600,
+          "spent": 0,
+          "playerIds": [
+            "187933845"
+          ],
+          "totalPower": 89
+        },
+        {
+          "id": "341670770",
+          "captainId": "341670770",
+          "name": "大蟑螂队",
+          "budget": 600,
+          "spent": 0,
+          "playerIds": [
+            "341670770"
+          ],
+          "totalPower": 87
+        },
+        {
+          "id": "885588023",
+          "captainId": "885588023",
+          "name": "YuuU队",
+          "budget": 600,
+          "spent": 0,
+          "playerIds": [
+            "885588023"
+          ],
+          "totalPower": 77
+        },
+        {
+          "id": "267719332",
+          "captainId": "267719332",
+          "name": "云天河队",
+          "budget": 600,
+          "spent": 0,
+          "playerIds": [
+            "267719332"
+          ],
+          "totalPower": 76
+        },
+        {
+          "id": "108868178",
+          "captainId": "108868178",
+          "name": "coconut队",
+          "budget": 600,
+          "spent": 0,
+          "playerIds": [
+            "108868178"
+          ],
+          "totalPower": 64
+        },
+        {
+          "id": "154029585",
+          "captainId": "154029585",
+          "name": "蜡笔小雪队",
+          "budget": 600,
+          "spent": 0,
+          "playerIds": [
+            "154029585"
+          ],
+          "totalPower": 60
+        },
+        {
+          "id": "283980539",
+          "captainId": "283980539",
+          "name": "绮怀.队",
+          "budget": 600,
+          "spent": 0,
+          "playerIds": [
+            "283980539"
+          ],
+          "totalPower": 28
+        }
+      ],
+      "currentLot": {
+        "playerId": "136801289",
+        "currentPrice": 20,
+        "leadingTeamId": null,
+        "bids": [],
+        "startedAt": "2026-03-26T11:02:16.374Z",
+        "expiresAt": "2026-03-26T11:03:56.374Z",
+        "remainingMs": 83096
+      },
+      "completedLots": [
+        {
+          "playerId": "1002",
+          "finalPrice": null,
+          "teamId": null,
+          "status": "unsold",
+          "settledAt": "2026-03-26T10:58:56.171Z"
+        },
+        {
+          "playerId": "1010",
+          "finalPrice": null,
+          "teamId": null,
+          "status": "unsold",
+          "settledAt": "2026-03-26T11:00:36.275Z"
+        },
+        {
+          "playerId": "164613165",
+          "finalPrice": null,
+          "teamId": null,
+          "status": "unsold",
+          "settledAt": "2026-03-26T11:02:16.374Z"
+        }
+      ],
+      "unsoldPlayerIds": [
+        "1002",
+        "1010",
+        "164613165"
+      ],
+      "createdAt": "2026-03-26T10:15:03.729Z",
+      "updatedAt": "2026-03-26T11:02:33.278Z"
+    },
     {
       "id": "auction_1773913101484_7ckz5t",
       "eventId": "event_1773909407340_vr7pow",
