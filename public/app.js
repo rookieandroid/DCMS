@@ -382,6 +382,45 @@ function getAuctionCountdown(auction) {
   return `${diff} s`;
 }
 
+function getAuctionMinBidAmount(auction) {
+  if (!auction?.currentLot) {
+    return auction?.config?.startPrice || 0;
+  }
+  return auction.currentLot.minBidAmount || (
+    auction.currentLot.leadingTeamId
+      ? auction.currentLot.currentPrice + auction.config.increment
+      : Math.max(auction.currentLot.currentPrice, auction.config.startPrice)
+  );
+}
+
+function getAuctionBidHint(auction, myTeam, amount) {
+  if (!myTeam) {
+    return "登录为队长后可以在这里参与竞价。";
+  }
+  if (!auction?.currentLot) {
+    return `你当前代表 ${myTeam.name} 竞价，剩余预算 ${myTeam.remainingBudget}。`;
+  }
+
+  const minAmount = getAuctionMinBidAmount(auction);
+  const maxBidAmount = Number.isFinite(auction.maxBidAmount) ? auction.maxBidAmount : null;
+  const slotsRemaining = Number.isFinite(myTeam.slotsRemaining) ? myTeam.slotsRemaining : null;
+  const reserveBudget = Number.isFinite(myTeam.reserveBudget) ? myTeam.reserveBudget : null;
+
+  if (slotsRemaining === 0) {
+    return `${myTeam.name} 已满员，本轮只能观望。`;
+  }
+  if (maxBidAmount !== null && maxBidAmount < minAmount) {
+    return `${myTeam.name} 需要先保留后续成型预算，本轮暂时无法安全出价。`;
+  }
+  if (maxBidAmount !== null && amount > maxBidAmount) {
+    return `当前最多建议出到 ${maxBidAmount}，再高会挤占后续补人预算。`;
+  }
+  if (maxBidAmount !== null && amount === maxBidAmount && amount >= minAmount) {
+    return `这已经接近你本轮的安全上限，需预留 ${reserveBudget ?? 0} 预算补齐后续名额。`;
+  }
+  return `你当前代表 ${myTeam.name} 竞价，剩余预算 ${myTeam.remainingBudget}${reserveBudget ? `，建议至少预留 ${reserveBudget}` : ""}。`;
+}
+
 function connectStreams() {
   closeStreams();
   const auction = getCurrentAuction();
@@ -423,6 +462,27 @@ function playerCard(player, extra = "") {
         <span>ID ${player.id} · 战力 ${player.power}</span>
         ${extra}
       </div>
+    </article>
+  `;
+}
+
+function compactAuctionPlayerCard(player, options = {}) {
+  const className = options.isCaptain ? "auction-roster-player auction-roster-player-captain" : "auction-roster-player";
+  return `
+    <article class="${className}">
+      <strong>${player.displayName}</strong>
+      <span class="auction-player-power">${player.power}</span>
+      <span class="auction-player-positions">${(player.positions || []).join("/") || "-"}</span>
+    </article>
+  `;
+}
+
+function compactAuctionEmptySlot() {
+  return `
+    <article class="auction-roster-player auction-roster-player-empty">
+      <strong>待定</strong>
+      <span class="auction-player-power">--</span>
+      <span class="auction-player-positions">-</span>
     </article>
   `;
 }
@@ -853,11 +913,11 @@ function renderAuctionHall() {
   const myTeam = auction.teams.find((team) => team.id === auction.myTeamId) || null;
   const soldCount = auction.completedLots.filter((lot) => lot.status === "sold").length;
   const unsoldCount = auction.unsoldPlayers.length;
-  const nextBidAmount = auction.currentLot
-    ? auction.currentLot.leadingTeamId
-      ? auction.currentLot.currentPrice + auction.config.increment
-      : Math.max(auction.currentLot.currentPrice, auction.config.startPrice)
-    : auction.config.startPrice;
+  const nextBidAmount = getAuctionMinBidAmount(auction);
+  const bidHint = getAuctionBidHint(auction, myTeam, nextBidAmount);
+  const teamStackClass = auction.teams.length > 8
+    ? "team-stack compact-team-stack compact-team-grid scrollable"
+    : "team-stack compact-team-stack compact-team-grid";
 
   return `
     <section class="auction-shell">
@@ -889,24 +949,29 @@ function renderAuctionHall() {
             <h3>队伍情况</h3>
             <span>预算与战力同步更新</span>
           </div>
-          <div class="team-stack">
+          <div class="${teamStackClass}">
             ${auction.teams
               .map(
                 (team) => `
-                  <article class="team-card ${auction.currentLot?.leadingTeamId === team.id ? "highlight" : ""}">
+                  <article class="team-card auction-team-card ${auction.currentLot?.leadingTeamId === team.id ? "highlight" : ""}">
                     <div class="team-card-head">
-                      <div>
-                        <strong>${team.name}</strong>
-                        <span>队长 ${team.captain.displayName}</span>
-                      </div>
-                      <span class="budget-chip">${team.remainingBudget}/${team.budget}</span>
+                      <span class="auction-team-power">总战力 ${team.totalPower}</span>
+                      <span class="budget-chip compact-budget-chip">${team.remainingBudget}/${team.budget}</span>
                     </div>
-                    <div class="team-stat-row">
-                      <span>总战力 ${team.totalPower}</span>
-                      <span>已拍 ${team.players.length - 1}</span>
-                    </div>
-                    <div class="roster-list">
-                      ${team.players.map((player) => playerCard(player)).join("")}
+                    <div class="roster-list compact-roster-list">
+                      ${
+                        [
+                          ...team.players.map((player, index) =>
+                            compactAuctionPlayerCard(player, {
+                              isCaptain: index === 0 || player.id === team.captainId
+                            })
+                          ),
+                          ...Array.from(
+                            { length: Math.max(0, auction.teamSize - team.players.length) },
+                            () => compactAuctionEmptySlot()
+                          )
+                        ].join("")
+                      }
                     </div>
                   </article>
                 `
@@ -949,13 +1014,24 @@ function renderAuctionHall() {
           <div class="bid-panel">
             <form id="bid-form" class="bid-form">
               <button type="button" class="ghost-button" id="decrease-bid">- ${auction.config.increment}</button>
-              <input name="amount" type="number" value="${nextBidAmount}" min="${nextBidAmount}" />
+              <input
+                name="amount"
+                type="number"
+                value="${nextBidAmount}"
+                min="${nextBidAmount}"
+                ${Number.isFinite(auction.maxBidAmount) && auction.maxBidAmount > 0 ? `max="${auction.maxBidAmount}"` : ""}
+              />
               <button type="button" class="ghost-button" id="increase-bid">+ ${auction.config.increment}</button>
               <button type="submit" class="action-button" ${auction.canBid ? "" : "disabled"}>我要出价</button>
             </form>
             <p class="helper-line">
-              ${myTeam ? `你当前代表 ${myTeam.name} 竞价，剩余预算 ${myTeam.remainingBudget}。` : "登录为队长后可以在这里参与竞价。"}
+              ${bidHint}
             </p>
+            ${
+              myTeam && auction.currentLot
+                ? `<p class="auction-rule-hint">起拍门槛 ${nextBidAmount}${Number.isFinite(auction.maxBidAmount) ? `，当前安全上限 ${auction.maxBidAmount}` : ""}。</p>`
+                : ""
+            }
           </div>
           <div class="history-strip">
             ${
@@ -1000,6 +1076,9 @@ function renderInhouseBoard() {
   const isCaptain = isEventCaptain(event, state.auth.playerId);
   const currentTeam = session?.teams.find((team) => team.id === session.currentTurnTeamId) || null;
   const availablePlayers = session?.availablePlayers || [];
+  const inhouseTeamStackClass = session && session.teams.length > 8
+    ? "team-stack compact-team-stack compact-team-grid scrollable inhouse-team-scroll"
+    : "team-stack compact-team-stack compact-team-grid inhouse-team-scroll";
   return `
     <section class="glass inhouse-shell">
       <div class="card-head">
@@ -1065,23 +1144,37 @@ function renderInhouseBoard() {
           </div>
         </div>
         <div class="teams-panel">
-          <h3>队伍与战力值</h3>
+          <div class="section-title">
+            <h3>队伍与战力值</h3>
+            <span>队长高亮显示，便于快速扫视概览</span>
+          </div>
           ${
             session
               ? `
-              <div class="team-stack compact-stack inhouse-team-scroll">
+              <div class="${inhouseTeamStackClass}">
                 ${session.teams
                   .map(
                     (team) => `
-                      <article class="team-card ${team.id === session.currentTurnTeamId ? "highlight" : ""}">
+                      <article class="team-card auction-team-card ${team.id === session.currentTurnTeamId ? "highlight" : ""}">
                         <div class="team-card-head">
-                          <div>
-                            <strong>${team.name}</strong>
-                            <span>总战力 ${team.totalPower}</span>
-                          </div>
-                          <span class="budget-chip">${team.members.length}/${session.teamSize}</span>
+                          <span class="auction-team-power">总战力 ${team.totalPower}</span>
+                          <span class="budget-chip compact-budget-chip">${team.members.length}/${session.teamSize}</span>
                         </div>
-                        <div class="roster-list">${team.members.map((player) => playerCard(player)).join("")}</div>
+                        <div class="roster-list compact-roster-list">
+                          ${
+                            [
+                              ...team.members.map((player, index) =>
+                                compactAuctionPlayerCard(player, {
+                                  isCaptain: index === 0 || player.id === team.captainId
+                                })
+                              ),
+                              ...Array.from(
+                                { length: Math.max(0, session.teamSize - team.members.length) },
+                                () => compactAuctionEmptySlot()
+                              )
+                            ].join("")
+                          }
+                        </div>
                       </article>
                     `
                   )
@@ -1735,15 +1828,25 @@ function bindEvents() {
   if (bidForm) {
     const amountInput = bidForm.querySelector('input[name="amount"]');
     const auction = getCurrentAuction();
-    const minAmount = auction?.currentLot?.leadingTeamId
-      ? auction.currentLot.currentPrice + auction.config.increment
-      : Math.max(auction?.currentLot?.currentPrice || 0, auction?.config?.startPrice || 0);
+    const minAmount = getAuctionMinBidAmount(auction);
+    const maxAmount = Number.isFinite(auction?.maxBidAmount) ? auction.maxBidAmount : null;
     const changeBid = (delta) => {
-      const next = Math.max(minAmount, Number(amountInput.value || minAmount) + delta);
+      const baseNext = Math.max(minAmount, Number(amountInput.value || minAmount) + delta);
+      const next = maxAmount !== null && maxAmount > 0 ? Math.min(baseNext, maxAmount) : baseNext;
       amountInput.value = next;
     };
     document.querySelector("#decrease-bid")?.addEventListener("click", () => changeBid(-auction.config.increment));
     document.querySelector("#increase-bid")?.addEventListener("click", () => changeBid(auction.config.increment));
+    amountInput.addEventListener("input", () => {
+      const raw = Number(amountInput.value || minAmount);
+      const clampedHigh = maxAmount !== null && maxAmount > 0 ? Math.min(raw, maxAmount) : raw;
+      amountInput.value = Math.max(minAmount, clampedHigh);
+      const helper = bidForm.parentElement?.querySelector(".helper-line");
+      if (helper) {
+        const myTeam = auction?.teams.find((team) => team.id === auction.myTeamId) || null;
+        helper.textContent = getAuctionBidHint(auction, myTeam, Number(amountInput.value || minAmount));
+      }
+    });
     bidForm.addEventListener("submit", async (event) => {
       event.preventDefault();
       try {

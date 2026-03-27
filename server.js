@@ -3,7 +3,16 @@
 const http = require("node:http");
 const fs = require("node:fs/promises");
 const path = require("node:path");
-const { ensureDb, loadDb, mutateDb, saveDb } = require("./src/lib/db");
+const {
+  ensureDb,
+  loadDb,
+  mutateDb,
+  transactAuctionBid,
+  transactAuctionStateChange,
+  transactEventSignup,
+  transactInhousePick,
+  transactSettleExpiredAuctions
+} = require("./src/lib/db");
 const { appendAuditLog } = require("./src/lib/audit");
 const { rateLimit } = require("./src/lib/rate-limit");
 const { getAdminPassword, getAuth, login } = require("./src/services/auth");
@@ -19,18 +28,13 @@ const {
   createEvent,
   deleteEvent,
   listEvents,
-  signupForEvent,
   toEventSummary,
   updateEvent
 } = require("./src/services/events");
-const { assignCaptains, getSessionForEvent, listSessions, makePick } = require("./src/services/inhouse");
+const { assignCaptains, listSessions } = require("./src/services/inhouse");
 const {
-  bid,
   createAuction,
-  listAuctions,
-  pauseAuction,
-  settleExpiredAuctions,
-  startAuction
+  listAuctions
 } = require("./src/services/auctions");
 
 const PORT = process.env.PORT || 3000;
@@ -107,7 +111,10 @@ async function serveStatic(urlPath, res) {
 
   try {
     const content = await fs.readFile(filePath);
-    res.writeHead(200, { "Content-Type": mimeTypes[path.extname(filePath)] || "application/octet-stream" });
+    res.writeHead(200, {
+      "Content-Type": mimeTypes[path.extname(filePath)] || "application/octet-stream",
+      "Cache-Control": "no-store"
+    });
     res.end(content);
   } catch {
     sendJson(res, 404, { error: "资源不存在。" });
@@ -215,32 +222,12 @@ async function broadcastEventSnapshots() {
 }
 
 async function settleAuctionsAndBroadcast() {
-  let changedAuctions = [];
   try {
-    await mutateDb(async (db) => {
-      const before = db.auctionRooms.map((auction) => ({
-        id: auction.id,
-        status: auction.status,
-        expiresAt: auction.currentLot?.expiresAt || null
-      }));
-      const changed = settleExpiredAuctions(db);
-      if (changed) {
-        changedAuctions = db.auctionRooms
-          .filter((auction, index) => {
-            const prev = before[index];
-            return (
-              !prev ||
-              prev.status !== auction.status ||
-              prev.expiresAt !== (auction.currentLot?.expiresAt || null)
-            );
-          })
-          .map((auction) => auction.id);
-      }
-    });
-    for (const auctionId of changedAuctions) {
+    const { changedAuctionIds } = await transactSettleExpiredAuctions();
+    for (const auctionId of changedAuctionIds) {
       await broadcastAuction(auctionId);
     }
-    if (changedAuctions.length) {
+    if (changedAuctionIds.length) {
       await broadcastEventSnapshots();
     }
   } catch (error) {
@@ -248,49 +235,50 @@ async function settleAuctionsAndBroadcast() {
   }
 }
 
-const server = http.createServer(async (req, res) => {
-  const reqUrl = new URL(req.url, `http://${req.headers.host}`);
+function createAppServer() {
+  return http.createServer(async (req, res) => {
+    const reqUrl = new URL(req.url, `http://${req.headers.host}`);
 
-  if (req.method === "POST" && reqUrl.pathname === "/api/auth/login") {
-    if (!enforceRateLimit(req, res, "auth-login", 10, 60 * 1000)) {
+    if (req.method === "POST" && reqUrl.pathname === "/api/auth/login") {
+      if (!enforceRateLimit(req, res, "auth-login", 10, 60 * 1000)) {
+        return;
+      }
+      try {
+        const body = await readJson(req);
+        const payload = await mutateDb((db) => login(db, body));
+        const db = await loadDb();
+        const auth = getAuth(db, payload.token);
+        await appendAuditLog({
+          action: "auth.login.success",
+          actor: auth,
+          ip: getClientIp(req),
+          details: { type: body.type }
+        });
+        sendJson(res, 200, {
+          ...payload,
+          bootstrap: buildBootstrap(db, auth)
+        });
+      } catch (error) {
+        await appendAuditLog({
+          action: "auth.login.failed",
+          actor: { role: "guest" },
+          ip: getClientIp(req),
+          details: { type: reqUrl.pathname }
+        });
+        sendJson(res, 400, { error: error.message || "登录失败。" });
+      }
       return;
     }
-    try {
-      const body = await readJson(req);
-      const payload = await mutateDb((db) => login(db, body));
-      const db = await loadDb();
-      const auth = getAuth(db, payload.token);
-      await appendAuditLog({
-        action: "auth.login.success",
-        actor: auth,
-        ip: getClientIp(req),
-        details: { type: body.type }
-      });
-      sendJson(res, 200, {
-        ...payload,
-        bootstrap: buildBootstrap(db, auth)
-      });
-    } catch (error) {
-      await appendAuditLog({
-        action: "auth.login.failed",
-        actor: { role: "guest" },
-        ip: getClientIp(req),
-        details: { type: reqUrl.pathname }
-      });
-      sendJson(res, 400, { error: error.message || "登录失败。" });
-    }
-    return;
-  }
 
-  if (req.method === "GET" && reqUrl.pathname === "/api/bootstrap") {
-    await withDbAuth(
-      req,
-      reqUrl,
-      async (db, auth) => sendJson(res, 200, buildBootstrap(db, auth)),
-      res
-    );
-    return;
-  }
+    if (req.method === "GET" && reqUrl.pathname === "/api/bootstrap") {
+      await withDbAuth(
+        req,
+        reqUrl,
+        async (db, auth) => sendJson(res, 200, buildBootstrap(db, auth)),
+        res
+      );
+      return;
+    }
 
   if (req.method === "GET" && reqUrl.pathname === "/api/players") {
     await withDbAuth(
@@ -546,15 +534,13 @@ const server = http.createServer(async (req, res) => {
       try {
         const body = await readJson(req);
         let authForAudit = { role: "guest" };
-        const payload = await mutateDb((db) => {
-          const auth = getAuth(db, getToken(req, reqUrl));
-          authForAudit = auth;
-          const event = signupForEvent(db, auth, eventId, body.action, body.playerId);
-          return {
-            event,
-            inhouseSession: getSessionForEvent(db, eventId)
-          };
+        const payload = await transactEventSignup({
+          token: getToken(req, reqUrl),
+          eventId,
+          action: body.action,
+          targetPlayerId: body.playerId
         });
+        authForAudit = payload.auth;
         await appendAuditLog({
           action: body.action === "cancel" ? "event.signup.cancel" : "event.signup",
           actor: describeActor(authForAudit),
@@ -611,7 +597,7 @@ const server = http.createServer(async (req, res) => {
       await withDbAuth(
         req,
         reqUrl,
-        async (db) => {
+        async (db, auth) => {
           const session = listSessions(db, auth).find((item) => item.id === sessionId);
           if (!session) {
             sendJson(res, 404, { error: "内战会话不存在。" });
@@ -630,11 +616,12 @@ const server = http.createServer(async (req, res) => {
       try {
         const body = await readJson(req);
         let authForAudit = { role: "guest" };
-        const payload = await mutateDb((db) => {
-          const auth = getAuth(db, getToken(req, reqUrl));
-          authForAudit = auth;
-          return { inhouseSession: makePick(db, auth, sessionId, body.playerId) };
+        const payload = await transactInhousePick({
+          token: getToken(req, reqUrl),
+          sessionId,
+          playerId: body.playerId
         });
+        authForAudit = payload.auth;
         await appendAuditLog({
           action: "inhouse.pick",
           actor: describeActor(authForAudit),
@@ -736,12 +723,12 @@ const server = http.createServer(async (req, res) => {
         return;
       }
       try {
-        let authForAudit = { role: "guest" };
-        const payload = await mutateDb((db) => {
-          const auth = getAuth(db, getToken(req, reqUrl));
-          authForAudit = auth;
-          return { auction: startAuction(db, auth, auctionId) };
+        const payload = await transactAuctionStateChange({
+          token: getToken(req, reqUrl),
+          auctionId,
+          action: "start"
         });
+        const authForAudit = payload.auth;
         await appendAuditLog({
           action: "auction.start",
           actor: describeActor(authForAudit),
@@ -761,12 +748,12 @@ const server = http.createServer(async (req, res) => {
         return;
       }
       try {
-        let authForAudit = { role: "guest" };
-        const payload = await mutateDb((db) => {
-          const auth = getAuth(db, getToken(req, reqUrl));
-          authForAudit = auth;
-          return { auction: pauseAuction(db, auth, auctionId) };
+        const payload = await transactAuctionStateChange({
+          token: getToken(req, reqUrl),
+          auctionId,
+          action: "pause"
         });
+        const authForAudit = payload.auth;
         await appendAuditLog({
           action: "auction.pause",
           actor: describeActor(authForAudit),
@@ -787,11 +774,12 @@ const server = http.createServer(async (req, res) => {
       try {
         const body = await readJson(req);
         let authForAudit = { role: "guest" };
-        const payload = await mutateDb((db) => {
-          const auth = getAuth(db, getToken(req, reqUrl));
-          authForAudit = auth;
-          return { auction: bid(db, auth, auctionId, body) };
+        const payload = await transactAuctionBid({
+          token: getToken(req, reqUrl),
+          auctionId,
+          input: body
         });
+        authForAudit = payload.auth;
         await appendAuditLog({
           action: "auction.bid",
           actor: describeActor(authForAudit),
@@ -838,22 +826,31 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  sendJson(res, 404, { error: "接口不存在。" });
-});
+    sendJson(res, 404, { error: "接口不存在。" });
+  });
+}
 
-ensureDb()
-  .then(async () => {
-    const db = await loadDb();
-    const changed = settleExpiredAuctions(db);
-    if (changed) {
-      await saveDb(db);
-    }
-    server.listen(PORT, HOST, () => {
-      console.log(`DCMS app listening on http://${HOST}:${PORT}`);
-    });
-    setInterval(settleAuctionsAndBroadcast, 1000);
-  })
-  .catch((error) => {
+async function startServer(server = createAppServer()) {
+  await ensureDb();
+  await transactSettleExpiredAuctions();
+
+  await new Promise((resolve) => {
+    server.listen(PORT, HOST, resolve);
+  });
+  console.log(`DCMS app listening on http://${HOST}:${PORT}`);
+
+  const settleTimer = setInterval(settleAuctionsAndBroadcast, 1000);
+  return { server, settleTimer };
+}
+
+if (require.main === module) {
+  startServer().catch((error) => {
     console.error(error);
     process.exit(1);
   });
+}
+
+module.exports = {
+  createAppServer,
+  startServer
+};

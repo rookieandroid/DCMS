@@ -36,10 +36,16 @@
   - 暂停 / 继续拍卖
   - 倒计时成交 / 流拍
   - SSE 实时更新
+  - 拍卖规则已补齐队伍满员限制与最低成型预算限制
+  - 队伍概览已支持固定槽位预留、队长高亮与紧凑总览布局
 - 安全基础能力
   - 管理员口令使用环境变量
   - 关键接口基础限流
   - 操作审计日志
+- 数据持久化
+  - 已从 JSON 文件方案迁移为 SQLite 持久化
+  - 首次启动支持从旧 JSON 数据自动导入
+  - 提供独立迁移脚本用于手动迁移
 
 ## 当前页面结构
 - `首页`
@@ -56,8 +62,12 @@
   - [`src/services/events.js`](/Users/pomcat/Documents/DCMS/src/services/events.js)
   - [`src/services/inhouse.js`](/Users/pomcat/Documents/DCMS/src/services/inhouse.js)
   - [`src/services/auctions.js`](/Users/pomcat/Documents/DCMS/src/services/auctions.js)
-- 数据文件：
-  - [`data/dcms-db.json`](/Users/pomcat/Documents/DCMS/data/dcms-db.json)
+- 数据访问层：
+  - [`src/lib/db.js`](/Users/pomcat/Documents/DCMS/src/lib/db.js)
+- 当前持久化文件：
+  - [`data/dcms.sqlite`](/Users/pomcat/Documents/DCMS/data/dcms.sqlite)
+- 迁移脚本：
+  - [`scripts/migrate-json-to-sqlite.js`](/Users/pomcat/Documents/DCMS/scripts/migrate-json-to-sqlite.js)
 
 ## 本地开发
 - 启动：
@@ -67,6 +77,10 @@ PORT=3010 HOST=127.0.0.1 node server.js
 - 测试：
 ```bash
 node --test
+```
+- 手动迁移旧 JSON 数据到 SQLite：
+```bash
+npm run db:migrate
 ```
 
 ## 线上部署信息
@@ -89,6 +103,7 @@ node --test
 
 ## 线上运行方式
 - PM2 配置文件：`/var/www/DCMS/ecosystem.config.cjs`
+- 生产持久化文件：`/var/www/DCMS/data/dcms.sqlite`
 - 关键环境变量：
   - `NODE_ENV=production`
   - `HOST=127.0.0.1`
@@ -110,7 +125,9 @@ node --test
 - 服务器 GitHub SSH deploy key 已配置完成，`ssh -T git@github.com` 已验证通过
 - 服务器部署目录已清理并重新对齐到 GitHub 最新主分支
 - 当前服务器已经可以直接执行标准 `git pull origin main`
-- 线上数据文件 `data/dcms-db.json` 已在服务器上标记为 `skip-worktree`，避免运行期数据阻塞发布
+- 线上运行期数据已切换为 `data/dcms.sqlite`
+- 发布时不要覆盖或删除服务器上的 `data/dcms.sqlite`
+- 如果服务器上还保留旧 `data/dcms-db.json`，它只应作为迁移来源或历史备份，不再作为运行主数据
 - 服务器本地运行文件 `data/audit.log`、`ecosystem.config.cjs` 已加入 `.git/info/exclude`
 - 当前已经具备正式的 `git pull + pm2 restart` 发布链路
 - 由于域名暂时关闭，最近一次运维还额外调整了 `nginx`，允许 `http://150.158.55.21` 直接访问应用
@@ -135,14 +152,32 @@ ssh root@150.158.55.21
 cd /var/www/DCMS
 /usr/local/bin/deploy_dcms
 ```
+- 首次上线或手动迁移旧 JSON 到 SQLite：
+```bash
+ssh root@150.158.55.21
+cd /var/www/DCMS
+npm run db:migrate
+pm2 restart dcms --update-env
+```
+- 备份 SQLite 主数据：
+```bash
+cp /var/www/DCMS/data/dcms.sqlite /var/www/DCMS/data/dcms.sqlite.bak.$(date +%F-%H%M%S)
+```
 
 发布脚本会执行：
 - `git pull origin main`
 - `npm install --omit=dev`
 - `pm2 restart dcms`
 
+SQLite 版本发布注意事项：
+- 发布前尽量备份 `data/dcms.sqlite`
+- 不要再把 `data/dcms-db.json` 当成线上主数据文件
+- 如果刚从旧版本升级到 SQLite 版本，先执行一次 `npm run db:migrate`
+- 如果服务器已经生成 SQLite 文件，后续正常发布不应重复覆盖该文件
+
 ## 审计与安全
 - 审计日志位置：`/var/www/DCMS/data/audit.log`
+- SQLite 主数据位置：`/var/www/DCMS/data/dcms.sqlite`
 - 生产环境管理员口令来源：`DCMS_ADMIN_PASSWORD`
 - 已做基础限流与操作审计
 
@@ -158,12 +193,25 @@ cd /var/www/DCMS
 - 拍卖配置区增加赛事准备度信息
 - 内战选人页多个列表统一为卡片内滚动，中间选手池改为双列
 - 选手拍卖页、后台管理页、首页公开玩家库都已做长列表收口，避免整页无限拉长
+- 选手拍卖页左侧“队伍情况”已改为更紧凑的双列总览布局
+- 内战选人页右侧“队伍与战力值”已对齐为与拍卖页一致的紧凑队伍概览
+- 静态资源响应已补 `Cache-Control: no-store`，避免前端样式被浏览器缓存
 
 ## 今天新增的能力
 - 通过 OpenDota 接口为玩家同步 Steam 头像
 - 玩家卡片、公开玩家库、后台玩家列表、赛事报名勾选卡、内战选人池、拍卖页等位置统一支持头像显示
 - Excel 再次导入玩家时会保留已有头像，不会被空值覆盖
 - 动态接口与前端请求已补 `no-store`，删除玩家后的刷新表现更稳定
+- `GET /api/inhouse/:id` 路由缺陷已修复，并补了真实路由级测试
+- 数据层已从 `data/dcms-db.json` 迁移为 `data/dcms.sqlite`
+- 启动时支持从旧 JSON 自动导入 SQLite，另提供 `npm run db:migrate` 手动迁移脚本
+- 数据访问层已改为 SQLite 持久化，测试中已覆盖 SQLite 初始化
+- 拍卖规则已增加：
+  - 队伍满员后不可继续出价
+  - 出价必须保留后续最低成型预算
+  - 队伍视图返回剩余名额、安全上限等辅助字段
+- 选手拍卖页与内战选人页的队伍概览都已改为紧凑型总览卡片，支持固定槽位预留与队长高亮
+- 当前测试数已扩展到 30 条，全部通过
 
 ## 最近一次代码提交
 - `7732b59` `Polish player cards and avatar sync UX`
@@ -179,7 +227,8 @@ cd /var/www/DCMS
 - 增加赛事编辑能力
 - 增加 Excel 导入的后台进度反馈与失败明细
 - 拍卖页和内战页继续做大屏化视觉增强
-- 逐步把 JSON 存储迁移到数据库
+- 把当前 SQLite 快照式读写继续演进为热点路径上的细粒度 SQL 事务
+- 复查服务器部署脚本与运维手册，把运行期数据保护对象从 JSON 文件切换到 SQLite 文件
 - 处理 `xlsx` 依赖带来的 `1 high severity vulnerability`
 
 ## 给下一次 Codex 的推荐提示词

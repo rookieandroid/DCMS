@@ -4,6 +4,7 @@
   "private": true,
   "type": "commonjs",
   "scripts": {
+    "db:migrate": "node scripts/migrate-json-to-sqlite.js",
     "start": "node server.js",
     "test": "node --test"
   },

@@ -17,6 +17,45 @@ function getAuction(db, auctionId) {
   return auction;
 }
 
+function getAuctionTeamSize(db, auction) {
+  const eventTeamSize = db.events.find((item) => item.id === auction.eventId)?.teamSize;
+  return Math.max(1, Number(auction.teamSize || eventTeamSize || 1));
+}
+
+function getTeamSlotsRemaining(db, auction, team) {
+  return Math.max(0, getAuctionTeamSize(db, auction) - team.playerIds.length);
+}
+
+function getReserveBudgetForRemainingSlots(db, auction, team, slotsToFill = getTeamSlotsRemaining(db, auction, team)) {
+  return Math.max(0, slotsToFill) * auction.config.startPrice;
+}
+
+function getMaxSafeBid(db, auction, team) {
+  const slotsRemaining = getTeamSlotsRemaining(db, auction, team);
+  if (slotsRemaining <= 0) {
+    return 0;
+  }
+  const reserveAfterThisWin = getReserveBudgetForRemainingSlots(db, auction, team, slotsRemaining - 1);
+  return Math.max(0, remainingBudget(team) - reserveAfterThisWin);
+}
+
+function canTeamBidOnCurrentLot(db, auction, team, amount) {
+  const slotsRemaining = getTeamSlotsRemaining(db, auction, team);
+  if (slotsRemaining <= 0) {
+    return { allowed: false, reason: "队伍人数已满，不能继续拍下选手。" };
+  }
+
+  const maxSafeBid = getMaxSafeBid(db, auction, team);
+  if (amount > maxSafeBid) {
+    return {
+      allowed: false,
+      reason: "出价后将无法保留后续最低成型预算。"
+    };
+  }
+
+  return { allowed: true, maxSafeBid };
+}
+
 function createAuction(db, auth, input) {
   assertAdmin(auth);
   const event = db.events.find((item) => item.id === input.eventId);
@@ -37,6 +76,7 @@ function createAuction(db, auth, input) {
     eventId: event.id,
     title: String(input.title || `${event.name} 选手拍卖`).trim(),
     status: "pending",
+    teamSize: Math.max(1, Number(event.teamSize || 0)),
     nominationOrder,
     currentNominationIndex: 0,
     config: {
@@ -144,6 +184,10 @@ function bid(db, auth, auctionId, input) {
   if (remainingBudget(team) < amount) {
     throw new Error("预算不足，无法出价。");
   }
+  const bidCheck = canTeamBidOnCurrentLot(db, auction, team, amount);
+  if (!bidCheck.allowed) {
+    throw new Error(bidCheck.reason);
+  }
 
   auction.currentLot.currentPrice = amount;
   auction.currentLot.leadingTeamId = team.id;
@@ -175,16 +219,28 @@ function settleCurrentLot(db, auction) {
     });
   } else {
     const team = auction.teams.find((item) => item.id === lot.leadingTeamId);
-    team.spent += lot.currentPrice;
-    team.playerIds.push(lot.playerId);
-    team.totalPower += playerMap[lot.playerId].power;
-    auction.completedLots.push({
-      playerId: lot.playerId,
-      finalPrice: lot.currentPrice,
-      teamId: team.id,
-      status: "sold",
-      settledAt: nowIso()
-    });
+    const settleCheck = team ? canTeamBidOnCurrentLot(db, auction, team, lot.currentPrice) : { allowed: false };
+    if (!team || !settleCheck.allowed) {
+      auction.unsoldPlayerIds.push(lot.playerId);
+      auction.completedLots.push({
+        playerId: lot.playerId,
+        finalPrice: null,
+        teamId: null,
+        status: "unsold",
+        settledAt: nowIso()
+      });
+    } else {
+      team.spent += lot.currentPrice;
+      team.playerIds.push(lot.playerId);
+      team.totalPower += playerMap[lot.playerId].power;
+      auction.completedLots.push({
+        playerId: lot.playerId,
+        finalPrice: lot.currentPrice,
+        teamId: team.id,
+        status: "sold",
+        settledAt: nowIso()
+      });
+    }
   }
   auction.currentNominationIndex += 1;
   auction.currentLot = null;
@@ -216,11 +272,22 @@ function serializeAuction(db, auction, auth) {
     ? auction.teams.find((team) => team.id === auction.currentLot.leadingTeamId) || null
     : null;
   const myTeam = auth?.playerId ? findCaptainTeam(auction, auth.playerId) : null;
+  const myBidMeta = myTeam && auction.currentLot
+    ? canTeamBidOnCurrentLot(
+        db,
+        auction,
+        myTeam,
+        auction.currentLot.leadingTeamId
+          ? auction.currentLot.currentPrice + auction.config.increment
+          : Math.max(auction.config.startPrice, auction.currentLot.currentPrice)
+      )
+    : null;
   return {
     id: auction.id,
     eventId: auction.eventId,
     title: auction.title,
     status: auction.status,
+    teamSize: getAuctionTeamSize(db, auction),
     config: auction.config,
     teams: auction.teams.map((team) => ({
       id: team.id,
@@ -229,6 +296,9 @@ function serializeAuction(db, auction, auth) {
       budget: team.budget,
       spent: team.spent,
       remainingBudget: remainingBudget(team),
+      slotsRemaining: getTeamSlotsRemaining(db, auction, team),
+      reserveBudget: getReserveBudgetForRemainingSlots(db, auction, team),
+      maxSafeBid: getMaxSafeBid(db, auction, team),
       totalPower: team.totalPower,
       captain: sanitizePlayer(playerMap[team.captainId], auth),
       players: team.playerIds.map((id) => sanitizePlayer(playerMap[id], auth)).filter(Boolean)
@@ -238,7 +308,10 @@ function serializeAuction(db, auction, auth) {
           ...auction.currentLot,
           player: sanitizePlayer(currentPlayer, auth),
           leadingTeamName: leadingTeam?.name || null,
-          remainingMs: auction.currentLot.remainingMs || null
+          remainingMs: auction.currentLot.remainingMs || null,
+          minBidAmount: auction.currentLot.leadingTeamId
+            ? auction.currentLot.currentPrice + auction.config.increment
+            : Math.max(auction.currentLot.currentPrice, auction.config.startPrice)
         }
       : null,
     upcomingPlayers: auction.nominationOrder
@@ -253,7 +326,8 @@ function serializeAuction(db, auction, auth) {
     })),
     unsoldPlayers: auction.unsoldPlayerIds.map((id) => sanitizePlayer(playerMap[id], auth)).filter(Boolean),
     myTeamId: myTeam?.id || null,
-    canBid: Boolean(myTeam && auction.status === "running" && auction.currentLot)
+    canBid: Boolean(myTeam && auction.status === "running" && auction.currentLot && myBidMeta?.allowed),
+    maxBidAmount: myTeam ? getMaxSafeBid(db, auction, myTeam) : null
   };
 }
 

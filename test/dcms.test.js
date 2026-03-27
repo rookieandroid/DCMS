@@ -1,9 +1,22 @@
 "use strict";
 
+const fs = require("node:fs/promises");
+const { Readable } = require("node:stream");
+const { setTimeout: delay } = require("node:timers/promises");
 const test = require("node:test");
 const assert = require("node:assert/strict");
 const XLSX = require("xlsx");
 const { createSeedData } = require("../src/seed");
+const {
+  dbPath,
+  ensureDb,
+  loadDb,
+  mutateDb,
+  resetDb,
+  transactAuctionBid,
+  transactAuctionStateChange,
+  transactSettleExpiredAuctions
+} = require("../src/lib/db");
 const {
   createPlayer,
   deletePlayer,
@@ -12,7 +25,7 @@ const {
   syncPlayerAvatars,
   updatePlayer
 } = require("../src/services/players");
-const { login, getAuth } = require("../src/services/auth");
+const { getAdminPassword, login, getAuth } = require("../src/services/auth");
 const { deleteEvent, signupForEvent, updateEvent } = require("../src/services/events");
 const { assignCaptains, makePick } = require("../src/services/inhouse");
 const {
@@ -23,9 +36,55 @@ const {
   settleExpiredAuctions,
   startAuction
 } = require("../src/services/auctions");
+const { createAppServer } = require("../server");
 
 function freshDb() {
   return createSeedData();
+}
+
+async function invokeJsonRequest(server, { method = "GET", path, headers = {} }) {
+  return await new Promise((resolve, reject) => {
+    const req = new Readable({
+      read() {
+        this.push(null);
+      }
+    });
+    req.method = method;
+    req.url = path;
+    req.headers = {
+      host: "127.0.0.1",
+      ...headers
+    };
+    req.socket = { remoteAddress: "127.0.0.1" };
+
+    const response = {
+      statusCode: 200,
+      headers: {},
+      body: "",
+      writeHead(statusCode, nextHeaders) {
+        this.statusCode = statusCode;
+        this.headers = nextHeaders;
+      },
+      write(chunk) {
+        this.body += String(chunk);
+      },
+      end(chunk) {
+        if (chunk) {
+          this.body += String(chunk);
+        }
+        try {
+          resolve({
+            statusCode: this.statusCode,
+            body: this.body ? JSON.parse(this.body) : null
+          });
+        } catch (error) {
+          reject(error);
+        }
+      }
+    };
+
+    server.emit("request", req, response);
+  });
 }
 
 test("玩家库拦截重复数字 ID", () => {
@@ -39,6 +98,12 @@ test("玩家库拦截重复数字 ID", () => {
       }),
     /已存在/
   );
+});
+
+test("数据库初始化会创建 SQLite 持久化文件", async () => {
+  await ensureDb();
+  await fs.access(dbPath);
+  assert.equal(dbPath.endsWith(".sqlite"), true);
 });
 
 test("编辑玩家时禁止修改数字 ID", () => {
@@ -267,6 +332,67 @@ test("创建拍卖时支持给不同队长分配不同预算", () => {
   assert.equal(teamB.budget, 450);
 });
 
+test("拍卖出价会保留后续最低成型预算", () => {
+  const db = freshDb();
+  const event = db.events[0];
+  event.teamSize = 3;
+  const auction = createAuction(db, { role: "admin" }, {
+    eventId: event.id,
+    title: "成型预算校验",
+    playerIds: ["1003", "1004", "1005"],
+    startPrice: 20,
+    increment: 10,
+    budgetMap: {
+      "1001": 50,
+      "1002": 50
+    }
+  });
+
+  startAuction(db, { role: "admin" }, auction.id);
+
+  assert.throws(
+    () => bid(db, { role: "player", playerId: "1001" }, auction.id, { amount: 40 }),
+    /最低成型预算/
+  );
+
+  const accepted = bid(db, { role: "player", playerId: "1001" }, auction.id, { amount: 30 });
+  assert.equal(accepted.currentLot.currentPrice, 30);
+  assert.equal(accepted.maxBidAmount, 30);
+});
+
+test("队伍满员后不能继续参与拍卖", () => {
+  const db = freshDb();
+  const event = db.events[0];
+  event.teamSize = 2;
+  const auction = createAuction(db, { role: "admin" }, {
+    eventId: event.id,
+    title: "满员校验拍卖",
+    playerIds: ["1003", "1004"],
+    startPrice: 20,
+    increment: 10,
+    budgetMap: {
+      "1001": 200,
+      "1002": 200
+    }
+  });
+
+  startAuction(db, { role: "admin" }, auction.id);
+  bid(db, { role: "player", playerId: "1001" }, auction.id, { amount: 20 });
+  db.auctionRooms[0].currentLot.expiresAt = new Date(Date.now() - 1000).toISOString();
+  settleExpiredAuctions(db);
+
+  assert.equal(db.auctionRooms[0].teams.find((team) => team.id === "1001").playerIds.length, 2);
+  assert.throws(
+    () => bid(db, { role: "player", playerId: "1001" }, auction.id, { amount: 20 }),
+    /人数已满/
+  );
+
+  const auctions = listAuctions(db, { role: "player", playerId: "1001" });
+  const current = auctions.find((item) => item.id === auction.id);
+  assert.equal(current.canBid, false);
+  assert.equal(current.teams.find((team) => team.id === "1001").slotsRemaining, 0);
+});
+
 test("拍卖倒计时结束后自动成交", () => {
   const db = freshDb();
   const auction = startAuction(db, { role: "admin" }, db.auctionRooms[0].id);
@@ -313,4 +439,131 @@ test("普通玩家在拍卖视图中看不到其他人的私有字段", () => {
   const auctions = listAuctions(db, { role: "player", playerId: "1001" });
   const otherCaptain = auctions[0].teams.find((team) => team.captainId === "1002").captain;
   assert.equal("wechatName" in otherCaptain, false);
+});
+
+test("GET /api/inhouse/:id 返回指定内战会话", { concurrency: false }, async () => {
+  const originalDb = await loadDb();
+  const seededDb = createSeedData();
+  await resetDb(seededDb);
+
+  const server = createAppServer();
+
+  try {
+    const sessionId = seededDb.inhouseSessions[0].id;
+    const response = await invokeJsonRequest(server, {
+      path: `/api/inhouse/${sessionId}`
+    });
+
+    assert.equal(response.statusCode, 200);
+    assert.equal(response.body.inhouseSession.id, sessionId);
+    assert.equal(response.body.inhouseSession.eventId, seededDb.events[0].id);
+  } finally {
+    await resetDb(originalDb);
+  }
+});
+
+test("mutateDb 会串行执行并保留重叠请求的全部修改", { concurrency: false }, async () => {
+  const originalDb = await loadDb();
+  const seededDb = createSeedData();
+  await resetDb(seededDb);
+
+  try {
+    await Promise.all([
+      mutateDb(async (db) => {
+        db.meta.firstMutationStarted = true;
+        await delay(25);
+        db.players[0].displayName = "并发测试-A";
+      }),
+      mutateDb(async (db) => {
+        db.meta.secondMutationStarted = true;
+        db.events[0].status = "archived";
+      })
+    ]);
+
+    const nextDb = await loadDb();
+    assert.equal(nextDb.players[0].displayName, "并发测试-A");
+    assert.equal(nextDb.events[0].status, "archived");
+    assert.equal(nextDb.meta.firstMutationStarted, true);
+    assert.equal(nextDb.meta.secondMutationStarted, true);
+  } finally {
+    await resetDb(originalDb);
+  }
+});
+
+test("transactAuctionStateChange 会持久化拍卖开始与暂停状态", { concurrency: false }, async () => {
+  const originalDb = await loadDb();
+  const seededDb = createSeedData();
+  await resetDb(seededDb);
+
+  try {
+    const auctionId = seededDb.auctionRooms[0].id;
+    const adminSession = await mutateDb((db) =>
+      login(db, { type: "admin", password: getAdminPassword() })
+    );
+
+    const started = await transactAuctionStateChange({
+      token: adminSession.token,
+      auctionId,
+      action: "start"
+    });
+    assert.equal(started.auction.status, "running");
+
+    const paused = await transactAuctionStateChange({
+      token: adminSession.token,
+      auctionId,
+      action: "pause"
+    });
+    assert.equal(paused.auction.status, "paused");
+    assert.ok(paused.auction.currentLot.remainingMs > 0);
+
+    const nextDb = await loadDb();
+    const persistedAuction = nextDb.auctionRooms.find((auction) => auction.id === auctionId);
+    assert.equal(persistedAuction.status, "paused");
+    assert.ok(persistedAuction.currentLot.remainingMs > 0);
+  } finally {
+    await resetDb(originalDb);
+  }
+});
+
+test("transactSettleExpiredAuctions 会批量结算超时拍品并落库", { concurrency: false }, async () => {
+  const originalDb = await loadDb();
+  const seededDb = createSeedData();
+  await resetDb(seededDb);
+
+  try {
+    const auctionId = seededDb.auctionRooms[0].id;
+    const adminSession = await mutateDb((db) =>
+      login(db, { type: "admin", password: getAdminPassword() })
+    );
+    const captainSession = await mutateDb((db) =>
+      login(db, { type: "player", playerId: "1001" })
+    );
+
+    await transactAuctionStateChange({
+      token: adminSession.token,
+      auctionId,
+      action: "start"
+    });
+    await transactAuctionBid({
+      token: captainSession.token,
+      auctionId,
+      input: { amount: 20 }
+    });
+    await mutateDb((db) => {
+      const auction = db.auctionRooms.find((item) => item.id === auctionId);
+      auction.currentLot.expiresAt = new Date(Date.now() - 1000).toISOString();
+    });
+
+    const result = await transactSettleExpiredAuctions();
+    assert.equal(result.changed, true);
+    assert.equal(result.changedAuctionIds.includes(auctionId), true);
+
+    const nextDb = await loadDb();
+    const persistedAuction = nextDb.auctionRooms.find((auction) => auction.id === auctionId);
+    assert.equal(persistedAuction.completedLots.length, 1);
+    assert.equal(persistedAuction.teams[0].playerIds.length, 2);
+    assert.ok(persistedAuction.currentLot);
+  } finally {
+    await resetDb(originalDb);
+  }
 });
